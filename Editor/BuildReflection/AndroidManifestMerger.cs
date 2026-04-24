@@ -1,0 +1,204 @@
+#if UNITY_EDITOR && UNITY_ANDROID
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Xml;
+using UnityEditor.Android;
+using UnityEngine;
+
+namespace Eagle
+{
+    public class AndroidManifestMerger : IPostGenerateGradleAndroidProject
+    {
+        private const string ANDROID_NS = "http://schemas.android.com/apk/res/android";
+
+        public int callbackOrder { get; }
+
+        public void OnPostGenerateGradleAndroidProject(string pathToBuiltProject)
+        {
+            var launcherPath = GetLauncherPath(pathToBuiltProject);
+
+            var configDict = GetAllConfig();
+
+            bool success = MergeBuildGradle(launcherPath, configDict);
+            if (!success) return;
+            MergeManifest(launcherPath, configDict);
+        }
+
+        private string GetLauncherPath(string pathToBuiltProject)
+        {
+            string launcherPath;
+
+            if (pathToBuiltProject.Contains("unityLibrary"))
+            {
+                var pathProject = pathToBuiltProject.Replace("unityLibrary", "");
+                launcherPath = pathProject + "/launcher";
+            }
+            else if (pathToBuiltProject.Contains("launcher"))
+            {
+                launcherPath = pathToBuiltProject;
+            }
+            else
+            {
+                launcherPath = pathToBuiltProject + "/launcher";
+            }
+
+            return launcherPath;
+        }
+
+        private Dictionary<string, string> GetAllConfig()
+        {
+            var configs = Resources.LoadAll<EagleBuildReflectionConfigBase>("");
+            Dictionary<string, string> configDict = new();
+
+            foreach (var config in configs)
+            {
+                foreach (var field in config.GetBuildFields())
+                {
+                    string key = field.Name;
+                    string value = ConvertValue(field.GetValue(config));
+
+                    if (string.IsNullOrEmpty(value)) continue;
+
+                    configDict.Add(key, value);
+                }
+            }
+
+            return configDict;
+        }
+
+        private void MergeManifest(string launcherPath, Dictionary<string, string> configDict)
+        {
+            string manifestPath = Path.Combine(launcherPath, "src/main/AndroidManifest.xml");
+
+            if (!File.Exists(manifestPath))
+            {
+                Debug.LogError($"Không tìm thấy file manifest: {manifestPath}");
+                return;
+            }
+
+            var xml = new XmlDocument();
+            xml.Load(manifestPath);
+            var manifest = xml.SelectSingleNode("/manifest");
+            if (manifest == null)
+            {
+                Debug.LogError($"Không tìm thấy thẻ manifest trong file {manifestPath}");
+                return;
+            }
+
+            var application = manifest.SelectSingleNode("application");
+            if (application == null)
+            {
+                Debug.LogError($"Không tìm thấy thẻ application trong manifest {manifestPath}");
+                return;
+            }
+
+            foreach (var (key, value) in configDict)
+            {
+                var nodes = application.SelectNodes("meta-data");
+                if (nodes == null)
+                {
+                    continue;
+                }
+
+                foreach (XmlNode node in nodes)
+                {
+                    if (node.Attributes != null && node.Attributes["android:name"]?.Value == key)
+                    {
+                        node.Attributes["android:value"].Value = value;
+                        return;
+                    }
+                }
+
+                var meta = xml.CreateElement("meta-data");
+                meta.SetAttribute("name", ANDROID_NS, key);
+                meta.SetAttribute("value", ANDROID_NS, $"${{{key}}}");
+                application.AppendChild(meta);
+            }
+
+            xml.Save(manifestPath);
+        }
+
+        private bool MergeBuildGradle(string launcherPath, Dictionary<string, string> configDict)
+        {
+            string buildGradlePath = Path.Combine(launcherPath, "build.gradle");
+
+            if (!File.Exists(buildGradlePath))
+            {
+                Debug.LogError($"Không tìm thấy file buildGradle: {buildGradlePath}");
+                return false;
+            }
+
+            string content = File.ReadAllText(buildGradlePath);
+            var placeHolders = GetPlaceHolders(configDict);
+
+            if (content.Contains("defaultConfig"))
+            {
+                int startOfDefaultConfig = content.IndexOf("defaultConfig", StringComparison.Ordinal);
+                if (startOfDefaultConfig == -1)
+                {
+                    Debug.LogError("Không thể chèn manifestPlaceholders vào defaultConfig trong build.gradle");
+                    return false;
+                }
+
+                int firstOpenBrace = content.IndexOf('{', startOfDefaultConfig);
+                int lastCloseBrace = FindClosingBrace(content, firstOpenBrace);
+                if (lastCloseBrace == -1)
+                {
+                    Debug.LogError("Không thể chèn manifestPlaceholders vào defaultConfig trong build.gradle");
+                    return false;
+                }
+
+                content = content.Insert(lastCloseBrace, placeHolders);
+                File.WriteAllText(buildGradlePath, content);
+                Debug.Log("Đã chèn manifestPlaceholders vào defaultConfig thành công!");
+                return true;
+            }
+
+            Debug.LogError("Không tìm thấy thẻ defaultConfig trong build.gradle");
+            return false;
+        }
+
+        private int FindClosingBrace(string text, int openBraceIndex)
+        {
+            int count = 0;
+            for (int i = openBraceIndex; i < text.Length; i++)
+            {
+                if (text[i] == '{') count++;
+                else if (text[i] == '}')
+                {
+                    count--;
+                    if (count == 0) return i;
+                }
+            }
+
+            return -1;
+        }
+
+        private string GetPlaceHolders(Dictionary<string, string> configDict)
+        {
+            var lines = configDict
+                .Select(x => $"\t\t\t{x.Key}: \"{x.Value}\"");
+            string placeHolders = "\n\t\tmanifestPlaceholders = [\n" +
+                                  string.Join(",\n", lines) +
+                                  "\n\t\t]\n\t";
+            return placeHolders;
+        }
+
+        private string ConvertValue(object value)
+        {
+            if (value == null) return null;
+
+            return value switch
+            {
+                bool b => b ? "true" : "false",
+                int i => i.ToString(),
+                float f => f.ToString(System.Globalization.CultureInfo.InvariantCulture),
+                string s => s,
+                _ => value.ToString()
+            };
+        }
+    }
+}
+#endif

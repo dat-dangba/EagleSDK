@@ -1,0 +1,11 @@
+{
+  "name": "com.eagle.sdk",
+  "displayName": "EagleSDK",
+  "description": "EagleSDK",
+  "author": "datdb",
+  "version": "1.0.0",
+  "website": "https://github.com/dat-dangba/EagleSDK",
+  "dependencies": {
+    "com.unity.nuget.newtonsoft-json": "3.2.2"
+  }
+}
