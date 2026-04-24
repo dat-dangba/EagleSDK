@@ -20,7 +20,7 @@ namespace Eagle
 
         static EagleSdkSymbolManager()
         {
-            RefreshSymbols();
+            // RefreshSymbols();
         }
 
         private static void RefreshSymbols()

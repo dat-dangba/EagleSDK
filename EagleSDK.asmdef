@@ -5,9 +5,7 @@
         "MaxSdk.Scripts.IntegrationManager.Editor",
         "MaxSdk.Scripts"
     ],
-    "includePlatforms": [
-        "Editor"
-    ],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
