@@ -2,8 +2,8 @@
     "name": "EagleSDK",
     "rootNamespace": "Eagle",
     "references": [
-        "MaxSdk.Scripts",
-        "MaxSdk.Scripts.IntegrationManager.Editor"
+        "GUID:a4cfc1a18fa3a469b96d885db522f42e",
+        "GUID:a10a05a8449c42519fd80f2b8b580de3"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -12,12 +12,6 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [
-        {
-            "name": "com.applovin.mediation.ads",
-            "expression": "1.0.0",
-            "define": "HAS_MAX_SDK"
-        }
-    ],
+    "versionDefines": [],
     "noEngineReferences": false
 }
