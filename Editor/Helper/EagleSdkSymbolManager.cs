@@ -61,6 +61,8 @@ namespace Eagle
             string newDefines = string.Join(";", symbolList.ToArray());
             // PlayerSettings.SetScriptingDefineSymbolsForGroup(targetGroup, newDefines);
             PlayerSettings.SetScriptingDefineSymbols(namedBuildTarget, newDefines);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
         }
     }
 }
