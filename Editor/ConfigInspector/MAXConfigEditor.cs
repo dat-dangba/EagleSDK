@@ -1,8 +1,5 @@
 using System.Collections.Generic;
 using System.IO;
-#if HAS_MAX_SDK
-using AppLovinMax.Scripts.IntegrationManager.Editor;
-#endif
 using Newtonsoft.Json;
 using UnityEditor;
 using UnityEditor.PackageManager;
@@ -49,10 +46,11 @@ namespace Eagle
                     AppLovinSettings settings = AppLovinSettings.Instance;
                     settings.SdkKey = serializedObject.FindProperty("MaxSdkKey").stringValue;
 
-                    AppLovinInternalSettings.Instance.ConsentFlowEnabled =
+                    AppLovinMax.Scripts.IntegrationManager.Editor.AppLovinInternalSettings.Instance.ConsentFlowEnabled =
                         serializedObject.FindProperty("ConsentFlowEnabled").boolValue;
 
-                    AppLovinInternalSettings.Instance.ConsentFlowPrivacyPolicyUrl =
+                    AppLovinMax.Scripts.IntegrationManager.Editor.AppLovinInternalSettings.Instance
+                            .ConsentFlowPrivacyPolicyUrl =
                         serializedObject.FindProperty("ConsentFlowPrivacyPolicyUrl").stringValue;
 #endif
                 });
