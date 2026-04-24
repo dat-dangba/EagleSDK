@@ -12,6 +12,12 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "com.applovin.mediation.ads",
+            "expression": "8.6.2",
+            "define": "HAS_MAX_SDK"
+        }
+    ],
     "noEngineReferences": false
 }
