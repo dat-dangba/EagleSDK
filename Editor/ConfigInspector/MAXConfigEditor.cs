@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.IO;
+#if HAS_MAX_SDK
 using AppLovinMax.Scripts.IntegrationManager.Editor;
+#endif
 using Newtonsoft.Json;
 using UnityEditor;
 using UnityEditor.PackageManager;
