@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace Eagle
 {
-    internal static class EagleConfigService
+    public static class EagleConfigService
     {
         private static Dictionary<Type, EagleEditorConfigBase> cacheConfigs = new();
 
-        internal static T GetConfig<T>() where T : EagleEditorConfigBase
+        public static T GetConfig<T>() where T : EagleEditorConfigBase
         {
             if (cacheConfigs.TryGetValue(typeof(T), out var config))
             {
