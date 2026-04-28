@@ -16,10 +16,12 @@ namespace Eagle
 
         public static T CreateAsset<T>(string folderPath) where T : ScriptableObject
         {
-            EnsureFolderExists(folderPath);
+            string path = $"Assets/Resources/{folderPath}";
+
+            EnsureFolderExists(path);
 
             string configName = typeof(T).Name;
-            string fullPath = Path.Combine(folderPath, $"{configName}.asset");
+            string fullPath = Path.Combine(path, $"{configName}.asset");
             if (File.Exists(fullPath)) return null;
             ScriptableObject asset = ScriptableObject.CreateInstance(typeof(T));
             AssetDatabase.CreateAsset(asset, fullPath);

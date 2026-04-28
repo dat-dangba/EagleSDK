@@ -59,10 +59,9 @@ namespace Eagle
         private void InstallMediatedNetworks()
         {
 #if HAS_MAX_SDK
+            Debug.Log($"{Tag} - Đang bắt đầu cài đặt MAX Mediated Networks ...");
             MAXMediatedNetworks mediatedNetworks =
-                AssetDatabase.LoadAssetAtPath<MAXMediatedNetworks>(
-                    $"{Constant.SettingsFolder}/MAXMediatedNetworks.asset");
-
+                Resources.Load<MAXMediatedNetworks>($"{Constant.SettingsFolder}/MAXMediatedNetworks");
             InstallPackageHelper.Install(mediatedNetworks.GetAllPackages(),
                 () => { EagleLog.Log("Đã cài đặt xong tất cả các Mediated Networks"); });
 #endif

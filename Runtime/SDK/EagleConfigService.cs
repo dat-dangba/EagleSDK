@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -18,14 +19,12 @@ namespace Eagle
                 return config as T;
             }
 
-#if UNITY_EDITOR
-            string path = $"{Constant.SettingsFolder}/{typeof(T).Name}.asset";
-            T t = AssetDatabase.LoadAssetAtPath<T>(path);
+            // string path = $"{Constant.SettingsFolder}/{typeof(T).Name}.asset";
+            // T t = AssetDatabase.LoadAssetAtPath<T>(path);
+            string path = $"{Constant.SettingsFolder}/{typeof(T).Name}";
+            T t = Resources.Load<T>(path);
             cacheConfigs.Add(typeof(T), t);
             return t;
-#else
-            return null;
-#endif
         }
     }
 }
