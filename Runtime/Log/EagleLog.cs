@@ -9,7 +9,7 @@ namespace Eagle
         Verbose
     }
 
-    internal static class EagleLog
+    public static class EagleLog
     {
         private static LogLevel CurrentLogLevel
         {
