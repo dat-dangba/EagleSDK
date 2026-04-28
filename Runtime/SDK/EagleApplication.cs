@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Eagle
 {
-    internal class EagleApplication : MonoBehaviour
+    public class EagleApplication : MonoBehaviour
     {
         public static event Action OnAppUpdate;
         public static event Action OnAppStart;
@@ -11,7 +11,6 @@ namespace Eagle
         public static event Action OnAppDisable;
         public static event Action<bool> OnAppPause;
         public static event Action<bool> OnAppFocus;
-        public static event Action OnAppQuit;
 
         private void OnApplicationPause(bool pause)
         {
@@ -41,11 +40,6 @@ namespace Eagle
         private void OnDisable()
         {
             OnAppDisable?.Invoke();
-        }
-
-        private void OnApplicationQuit()
-        {
-            OnAppQuit?.Invoke();
         }
     }
 }
