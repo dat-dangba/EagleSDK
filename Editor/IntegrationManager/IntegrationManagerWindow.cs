@@ -67,10 +67,10 @@ namespace Eagle
             switch (labelText)
             {
                 case "General":
-                    scriptableObject = EagleConfigService.GetConfig<GeneralSetting>();
+                    scriptableObject = EagleServices.GetSetting<GeneralSetting>();
                     break;
                 case "MAX":
-                    scriptableObject = EagleConfigService.GetConfig<MAXSetting>();
+                    scriptableObject = EagleServices.GetSetting<MAXSetting>();
                     break;
             }
 

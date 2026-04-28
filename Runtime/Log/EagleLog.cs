@@ -15,7 +15,7 @@ namespace Eagle
         {
             get
             {
-                var logConfig = EagleConfigService.GetConfig<GeneralSetting>();
+                var logConfig = EagleServices.GetSetting<GeneralSetting>();
                 return logConfig != null ? logConfig.LogLevel : LogLevel.Minimal;
             }
         }
