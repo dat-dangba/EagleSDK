@@ -30,14 +30,44 @@ namespace Eagle
         private void DrawInspector()
         {
             root.Clear();
-            if (IsMAXInstalled())
+            if (!EDM4UManager.IsEDM4UInstalled())
             {
-                DrawMAXSetting();
+                DrawInstallEDM4U();
+                return;
             }
-            else
+
+            if (!IsMAXInstalled())
             {
                 DrawInstallMAX();
+                return;
             }
+
+            DrawMAXSetting();
+        }
+
+        private void DrawInstallEDM4U()
+        {
+            Label label = new Label("EDM4U is not install")
+            {
+                style =
+                {
+                    height = 30,
+                    backgroundColor = new Color(0.345098f, 0.345098f, 0.345098f),
+                    color = Color.red,
+                    unityFontStyleAndWeight = FontStyle.Bold,
+                    unityTextAlign = TextAnchor.MiddleCenter,
+                }
+            };
+            root.Add(label);
+            Button installMediatedNetworksButton = new Button(EDM4UManager.ShowDialogSetupEDM4U)
+            {
+                text = "Install EDM4U",
+                style =
+                {
+                    marginTop = 20
+                }
+            };
+            root.Add(installMediatedNetworksButton);
         }
 
         private void DrawMAXSetting()
@@ -46,11 +76,10 @@ namespace Eagle
             InspectorElement.FillDefaultInspector(defaultInspector, serializedObject, this);
             root.Add(defaultInspector);
 
-            Button installMediatedNetworksButton = new Button
+            Button installMediatedNetworksButton = new Button(InstallMediatedNetworks)
             {
                 text = "Install Mediated Networks"
             };
-            installMediatedNetworksButton.RegisterCallback<ClickEvent>(evt => { InstallMediatedNetworks(); });
             root.Add(installMediatedNetworksButton);
 
             Button setupMaxSdkButton = new Button
@@ -109,12 +138,6 @@ namespace Eagle
             root.Add(label);
             Button installSdkButton = new Button(() =>
             {
-                if (!EDM4UManager.IsEDM4UInstalled())
-                {
-                    EDM4UManager.ShowDialogSetupEDM4U();
-                    return;
-                }
-
                 AddRegistry();
                 InstallMAX();
             })
