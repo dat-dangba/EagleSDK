@@ -138,7 +138,7 @@ namespace Eagle
                 return;
             }
 
-            InstallPackageHelper.Install($"https://{token}@github.com/dat-dangba/EagleAnalytics.git@1.0.0");
+            InstallPackageHelper.Install($"https://{token}@github.com/dat-dangba/EagleAnalytics.git");
         }
 
         private Label GetHeaderLabel()
