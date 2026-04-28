@@ -132,6 +132,12 @@ namespace Eagle
         private void InstallEagleAnalyticsSDK()
         {
             string token = EagleServices.GetSetting<GeneralSetting>().SDKToken;
+            if (string.IsNullOrEmpty(token))
+            {
+                EagleLog.Log("Nhập Token trước khi cài package");
+                return;
+            }
+
             InstallPackageHelper.Install($"https://{token}@github.com/dat-dangba/EagleAnalytics.git@1.0.0");
         }
 
