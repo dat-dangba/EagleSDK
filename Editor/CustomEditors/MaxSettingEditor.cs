@@ -32,28 +32,33 @@ namespace Eagle
             root.Clear();
             if (IsMAXInstalled())
             {
-                var defaultInspector = new VisualElement();
-                InspectorElement.FillDefaultInspector(defaultInspector, serializedObject, this);
-                root.Add(defaultInspector);
-
-                Button installMediatedNetworksButton = new Button
-                {
-                    text = "Install Mediated Networks"
-                };
-                installMediatedNetworksButton.RegisterCallback<ClickEvent>(evt => { InstallMediatedNetworks(); });
-                root.Add(installMediatedNetworksButton);
-
-                Button setupMaxSdkButton = new Button
-                {
-                    text = "Setup MAX Sdk"
-                };
-                setupMaxSdkButton.RegisterCallback<ClickEvent>(evt => { SetupMaxSdk(); });
-                root.Add(setupMaxSdkButton);
+                DrawMAXSetting();
             }
             else
             {
-                DrawInstallMAX(root);
+                DrawInstallMAX();
             }
+        }
+
+        private void DrawMAXSetting()
+        {
+            var defaultInspector = new VisualElement();
+            InspectorElement.FillDefaultInspector(defaultInspector, serializedObject, this);
+            root.Add(defaultInspector);
+
+            Button installMediatedNetworksButton = new Button
+            {
+                text = "Install Mediated Networks"
+            };
+            installMediatedNetworksButton.RegisterCallback<ClickEvent>(evt => { InstallMediatedNetworks(); });
+            root.Add(installMediatedNetworksButton);
+
+            Button setupMaxSdkButton = new Button
+            {
+                text = "Setup MAX Sdk"
+            };
+            setupMaxSdkButton.RegisterCallback<ClickEvent>(evt => { SetupMaxSdk(); });
+            root.Add(setupMaxSdkButton);
         }
 
         private void InstallMediatedNetworks()
@@ -88,7 +93,7 @@ namespace Eagle
             return Directory.Exists($"Packages/com.applovin.mediation.ads");
         }
 
-        private void DrawInstallMAX(VisualElement root)
+        private void DrawInstallMAX()
         {
             Label label = new Label("MAX Sdk is not install")
             {
@@ -102,7 +107,17 @@ namespace Eagle
                 }
             };
             root.Add(label);
-            Button installSdkButton = new Button
+            Button installSdkButton = new Button(() =>
+            {
+                if (!EDM4UManager.IsEDM4UInstalled())
+                {
+                    EDM4UManager.ShowDialogSetupEDM4U();
+                    return;
+                }
+
+                AddRegistry();
+                InstallMAX();
+            })
             {
                 text = "Install MAX Sdk",
                 style =
@@ -110,11 +125,6 @@ namespace Eagle
                     marginTop = 20
                 }
             };
-            installSdkButton.RegisterCallback<ClickEvent>(evt =>
-            {
-                AddRegistry();
-                InstallMAX();
-            });
             root.Add(installSdkButton);
         }
 
