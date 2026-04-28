@@ -4,8 +4,8 @@ using UnityEngine.UIElements;
 
 namespace Eagle
 {
-    [CustomEditor(typeof(GeneralConfig))]
-    public class GeneralConfigEditor : EagleConfigEditor
+    [CustomEditor(typeof(GeneralSetting))]
+    public class GeneralSettingsEditor : EagleSettingEditor
     {
         public override VisualElement CreateInspectorGUI()
         {

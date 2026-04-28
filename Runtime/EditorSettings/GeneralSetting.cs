@@ -1,6 +1,6 @@
 namespace Eagle
 {
-    public class GeneralConfig : EagleEditorConfigBase
+    public class GeneralSetting : EagleEditorSettingBase
     {
         public LogLevel LogLevel = LogLevel.Minimal;
     }

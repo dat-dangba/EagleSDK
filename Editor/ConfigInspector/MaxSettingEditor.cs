@@ -1,0 +1,152 @@
+using System.Collections.Generic;
+using System.IO;
+using UnityEditor;
+using UnityEditor.UIElements;
+using UnityEngine;
+using UnityEngine.UIElements;
+#if HAS_MAX_SDK
+using AppLovinMax.Scripts.IntegrationManager.Editor;
+#endif
+
+namespace Eagle
+{
+    [CustomEditor(typeof(MAXSetting))]
+    public class MaxSettingEditor : EagleSettingEditor
+    {
+        private const string Tag = "[SetupMAXSdk]";
+        private const string MAXPackage = "com.applovin.mediation.ads@8.6.2";
+        private VisualElement root;
+
+        public override VisualElement CreateInspectorGUI()
+        {
+            root = new VisualElement();
+            DrawInspector();
+
+            HideScript(root);
+
+            return root;
+        }
+
+        private void DrawInspector()
+        {
+            root.Clear();
+            if (IsMAXInstalled())
+            {
+                var defaultInspector = new VisualElement();
+                InspectorElement.FillDefaultInspector(defaultInspector, serializedObject, this);
+                root.Add(defaultInspector);
+
+                Button installMediatedNetworksButton = new Button
+                {
+                    text = "Install Mediated Networks"
+                };
+                installMediatedNetworksButton.RegisterCallback<ClickEvent>(evt => { InstallMediatedNetworks(); });
+                root.Add(installMediatedNetworksButton);
+
+                Button setupMaxSdkButton = new Button
+                {
+                    text = "Setup MAX Sdk"
+                };
+                setupMaxSdkButton.RegisterCallback<ClickEvent>(evt => { SetupMaxSdk(); });
+                root.Add(setupMaxSdkButton);
+            }
+            else
+            {
+                DrawInstallMAX(root);
+            }
+        }
+
+        private void InstallMediatedNetworks()
+        {
+#if HAS_MAX_SDK
+            MAXMediatedNetworks mediatedNetworks =
+                AssetDatabase.LoadAssetAtPath<MAXMediatedNetworks>(
+                    $"{Constant.SettingsFolder}/MAXMediatedNetworks.asset");
+
+            InstallPackageHelper.Install(mediatedNetworks.GetAllPackages(),
+                () => { EagleLog.Log("Đã cài đặt xong tất cả các Mediated Networks"); });
+#endif
+        }
+
+        private void SetupMaxSdk()
+        {
+#if HAS_MAX_SDK
+            AppLovinSettings settings = AppLovinSettings.Instance;
+            settings.SdkKey = serializedObject.FindProperty("MaxSdkKey").stringValue;
+            settings.AdMobAndroidAppId = serializedObject.FindProperty("GoogleAdmobAppId").stringValue;
+            settings.AdMobIosAppId = serializedObject.FindProperty("GoogleAdmobAppId").stringValue;
+
+            AppLovinInternalSettings.Instance.ConsentFlowEnabled =
+                serializedObject.FindProperty("ConsentFlowEnabled").boolValue;
+
+            AppLovinInternalSettings.Instance.ConsentFlowPrivacyPolicyUrl =
+                serializedObject.FindProperty("ConsentFlowPrivacyPolicyUrl").stringValue;
+#endif
+        }
+
+        private static bool IsMAXInstalled()
+        {
+            return Directory.Exists($"Packages/com.applovin.mediation.ads");
+        }
+
+        private void DrawInstallMAX(VisualElement root)
+        {
+            Label label = new Label("MAX Sdk is not install")
+            {
+                style =
+                {
+                    height = 30,
+                    backgroundColor = new Color(0.345098f, 0.345098f, 0.345098f),
+                    color = Color.red,
+                    unityFontStyleAndWeight = FontStyle.Bold,
+                    unityTextAlign = TextAnchor.MiddleCenter,
+                }
+            };
+            root.Add(label);
+            Button installSdkButton = new Button
+            {
+                text = "Install MAX Sdk",
+                style =
+                {
+                    marginTop = 20
+                }
+            };
+            installSdkButton.RegisterCallback<ClickEvent>(evt =>
+            {
+                AddRegistry();
+                InstallMAX();
+            });
+            root.Add(installSdkButton);
+        }
+
+        private void InstallMAX()
+        {
+            Debug.Log($"{Tag} - Đang bắt đầu cài đặt MAX ...");
+
+            InstallPackageHelper.Install(MAXPackage, InstallMaxCompleted);
+        }
+
+        private void InstallMaxCompleted()
+        {
+            MAXMediatedNetworks mediatedNetworks =
+                CreateAssets.CreateAsset<MAXMediatedNetworks>(Constant.SettingsFolder);
+            mediatedNetworks.CreateMediatedNetworks();
+        }
+
+        private void AddRegistry()
+        {
+            var maxRegistry = new ScopedRegistry
+            {
+                name = "AppLovin MAX Unity",
+                url = "https://unity.packages.applovin.com",
+                scopes = new List<string>
+                {
+                    "com.applovin.mediation.ads",
+                    "com.applovin.mediation.adapters",
+                    "com.applovin.mediation.dsp"
+                }
+            };
+            RegistryHelper.AddRegistry(maxRegistry);
+        }
+    }
+}

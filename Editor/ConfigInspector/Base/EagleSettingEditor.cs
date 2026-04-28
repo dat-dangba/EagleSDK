@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 
 namespace Eagle
 {
-    public class EagleConfigEditor : Editor
+    public class EagleSettingEditor : Editor
     {
         protected void HideScript(VisualElement root)
         {

@@ -20,9 +20,8 @@ namespace Eagle
         /*
          * Create Assets
          */
-        public const string ResourcePath = "Assets/Resources";
-        public const string EagleSDKFolder = "EagleSDK";
-        public const string BuildConfigFolder = "BuildConfig";
-        public const string ConfigFolder = "Config";
+        public const string EagleSDKFolder = "Assets/EagleSettings";
+        public const string BuildConfigFolder = "Assets/EagleSettings/BuildConfigs";
+        public const string SettingsFolder = "Assets/EagleSettings/SDKSettings";
     }
 }

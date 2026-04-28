@@ -11,11 +11,11 @@ namespace Eagle
 
     internal static class EagleLog
     {
-        public static LogLevel CurrentLogLevel
+        private static LogLevel CurrentLogLevel
         {
             get
             {
-                var logConfig = EagleConfigService.GetConfig<GeneralConfig>();
+                var logConfig = EagleConfigService.GetConfig<GeneralSetting>();
                 return logConfig != null ? logConfig.LogLevel : LogLevel.Minimal;
             }
         }

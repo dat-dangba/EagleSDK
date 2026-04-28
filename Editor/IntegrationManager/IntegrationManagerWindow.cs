@@ -6,20 +6,29 @@ using UnityEngine.UIElements;
 
 namespace Eagle
 {
-    public class EagleConfigsWindow : EditorWindow
+    public class IntegrationManagerWindow : EditorWindow
     {
         private Label currentLabel;
         private Color menuColor = new(0.15f, 0.15f, 0.15f);
         private Color contentColor = new(0.2f, 0.2f, 0.2f);
         private Label header;
         private VisualElement content;
+        private const float width = 800;
+        private const float height = 650;
 
         private string[] tabs = { "General", "MAX" };
 
-        [MenuItem("Eagle/Eagle Configs Manager")]
+        [MenuItem("Eagle/Eagle Integration Manager %#e")]
         public static void ShowWindow()
         {
-            GetWindow<EagleConfigsWindow>("Eagle Configs Manager");
+            var main = EditorGUIUtility.GetMainWindowPosition();
+
+            float x = main.x + (main.width - width) / 2f;
+            float y = main.y + (main.height - height) / 2f;
+
+            IntegrationManagerWindow window = GetWindow<IntegrationManagerWindow>("Eagle Integration Manager");
+            window.position = new Rect(x, y, width, height);
+            window.Show();
         }
 
         private void CreateGUI()
@@ -58,10 +67,10 @@ namespace Eagle
             switch (labelText)
             {
                 case "General":
-                    scriptableObject = EagleConfigService.GetConfig<GeneralConfig>();
+                    scriptableObject = EagleConfigService.GetConfig<GeneralSetting>();
                     break;
                 case "MAX":
-                    scriptableObject = EagleConfigService.GetConfig<MAXConfig>();
+                    scriptableObject = EagleConfigService.GetConfig<MAXSetting>();
                     break;
             }
 
@@ -93,7 +102,7 @@ namespace Eagle
 
         private static Label GetSDKNameLabel()
         {
-            Label sdkName = new Label("Eagle Configs Manager")
+            Label sdkName = new Label("Eagle Integration Manager")
             {
                 style =
                 {

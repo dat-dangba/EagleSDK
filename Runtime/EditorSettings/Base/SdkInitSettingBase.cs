@@ -1,6 +1,6 @@
 namespace Eagle
 {
-    public class SdkInitConfigBase : EagleEditorConfigBase
+    public class SdkInitSettingBase : EagleEditorSettingBase
     {
         public bool IsAutoInitialize;
     }
