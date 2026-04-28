@@ -11,7 +11,7 @@ namespace Eagle
 
     public static class EagleLog
     {
-        private static LogLevel CurrentLogLevel
+        public static LogLevel CurrentLogLevel
         {
             get
             {
