@@ -16,7 +16,7 @@ namespace Eagle
         private const float width = 800;
         private const float height = 650;
 
-        private string[] tabs = { "General", "MAX" };
+        private string[] tabs = { "General", "MAX", "Analytics" };
 
         [MenuItem("Eagle/Eagle Integration Manager %#e")]
         public static void ShowWindow()
@@ -63,24 +63,76 @@ namespace Eagle
                 header.text = labelText;
             }
 
-            ScriptableObject scriptableObject = null;
+            content.Clear();
             switch (labelText)
             {
                 case "General":
-                    scriptableObject = EagleServices.GetSetting<GeneralSetting>();
+                    DrawSetting<GeneralSetting>();
                     break;
                 case "MAX":
-                    scriptableObject = EagleServices.GetSetting<MAXSetting>();
+                    DrawSetting<MAXSetting>();
+                    break;
+                case "Analytics":
+                    DrawAdjustAnalyticsSetting();
                     break;
             }
+        }
 
-            if (scriptableObject == null) return;
-
-            content.Clear();
-            SerializedObject serialized = new SerializedObject(scriptableObject);
-            InspectorElement inspector = new InspectorElement(serialized);
-            inspector.Bind(serialized);
+        private void DrawAdjustAnalyticsSetting()
+        {
+#if HAS_EAGLE_ANALYTICS
+            ScriptableObject adjustSetting = EagleServices.GetSetting<SdkInitSettingBase>("AdjustSetting");
+            SerializedObject adjustSettingSerialized = new SerializedObject(adjustSetting);
+            InspectorElement inspector = new InspectorElement(adjustSettingSerialized);
+            inspector.Bind(adjustSettingSerialized);
+            inspector.style.flexGrow = 0;
             content.Add(inspector);
+
+            ScriptableObject adjustBuildConfig =
+                EagleServices.GetBuildConfig<EagleBuildReflectionConfigBase>("AdjustBuildConfig");
+            SerializedObject adjustBuildConfigSerialized = new SerializedObject(adjustBuildConfig);
+            InspectorElement adjustBuildConfigInspector = new InspectorElement(adjustBuildConfigSerialized);
+            adjustBuildConfigInspector.Bind(adjustBuildConfigSerialized);
+            adjustBuildConfigInspector.style.flexGrow = 0;
+            content.Add(adjustBuildConfigInspector);
+#else
+            Label label = new Label("Eagle Analytics Sdk is not install")
+            {
+                style =
+                {
+                    height = 30,
+                    backgroundColor = new Color(0.345098f, 0.345098f, 0.345098f),
+                    color = Color.red,
+                    unityFontStyleAndWeight = FontStyle.Bold,
+                    unityTextAlign = TextAnchor.MiddleCenter,
+                }
+            };
+            content.Add(label);
+            Button installEagleAnalytics = new Button(InstallEagleAnalyticsSDK)
+            {
+                text = "Install Eagle Analytics Sdk",
+                style =
+                {
+                    marginTop = 20
+                }
+            };
+            content.Add(installEagleAnalytics);
+#endif
+        }
+
+        private void DrawSetting<T>() where T : EagleEditorSettingBase
+        {
+            ScriptableObject generalSetting = EagleServices.GetSetting<T>();
+            SerializedObject generalSettingSerialized = new SerializedObject(generalSetting);
+            InspectorElement generalSettingInspector = new InspectorElement(generalSettingSerialized);
+            generalSettingInspector.Bind(generalSettingSerialized);
+            content.Add(generalSettingInspector);
+        }
+
+        private void InstallEagleAnalyticsSDK()
+        {
+            string token = EagleServices.GetSetting<GeneralSetting>().SDKToken;
+            InstallPackageHelper.Install($"https://{token}@github.com/dat-dangba/EagleAnalytics.git@1.0.0");
         }
 
         private Label GetHeaderLabel()
