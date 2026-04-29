@@ -105,28 +105,21 @@ namespace Eagle
                     DrawSetting<AdjustSetting>();
                     break;
                 case "MAX":
-                    DrawEagleAds(labelText);
+                    DrawMAXSettings();
                     break;
                 case "Eagle Analytics":
                     DrawEagleAnalytics();
                     break;
                 case "Eagle Ads":
-                    DrawEagleAds(labelText);
+                    DrawEagleAds();
                     break;
             }
         }
 
-        private void DrawEagleAds(string labelText)
+        private void DrawEagleAds()
         {
 #if !HAS_MAX_SDK
-            InstallPackage(
-                "MAX Sdk is not installed.",
-                "Install MAX Sdk",
-                () =>
-                {
-                    AddRegistry();
-                    InstallPackageHelper.Install("com.applovin.mediation.ads@8.6.2");
-                });
+            DrawMAXSettings();
 #elif !HAS_EAGLE_ADS
             InstallPackage(
                 "Eagle Ads Sdk is not installed.",
@@ -142,15 +135,23 @@ namespace Eagle
 
                     InstallPackageHelper.Install($"https://{token}@github.com/dat-dangba/EagleAds.git");
                 });
+#endif
+        }
+
+        private void DrawMAXSettings()
+        {
+#if HAS_MAX_SDK
+            DrawSetting<MAXSetting>();
 #else
-            if (labelText == "MAX")
-            {
-                DrawSetting("MAXSetting");
-            }
-            else
-            {
-                DrawSetting("MAXSetting");
-            }
+            InstallPackage(
+                "MAX Sdk is not installed.",
+                "Install MAX Sdk",
+                () =>
+                {
+                    AddRegistry();
+                    InstallPackageHelper.Install("com.applovin.mediation.ads@8.6.2",
+                        () => { CreateAssets.CreateAsset<MAXSetting>(Constant.SettingsFolder); });
+                });
 #endif
         }
 

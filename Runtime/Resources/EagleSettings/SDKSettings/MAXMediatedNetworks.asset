@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5611794383a44081bdd30715f480179, type: 3}
+  m_Name: MAXMediatedNetworks
+  m_EditorClassIdentifier: 
+  MediatedNetworks:
+  - Name: BidMachine
+    Package: bidmachine
+    AndroidVersion: 3060100.0.0
+    IOSVersion: 306010000.0.0
+  - Name: Chartboost
+    Package: chartboost
+    AndroidVersion: 9110100.0.0
+    IOSVersion: 9110000.0.0
+  - Name: DT Exchange
+    Package: fyber
+    AndroidVersion: 8040400.0.0
+    IOSVersion: 8040600.0.0
+  - Name: Facebook
+    Package: facebook
+    AndroidVersion: 6210000.0.0
+    IOSVersion: 6210100.0.0
+  - Name: Google
+    Package: google
+    AndroidVersion: 25020000.0.0
+    IOSVersion: 13030000.0.0
+  - Name: InMobi
+    Package: inmobi
+    AndroidVersion: 11020000.0.0
+    IOSVersion: 11020000.0.0
+  - Name: ironSource
+    Package: ironsource
+    AndroidVersion: 904000000.0.0
+    IOSVersion: 904000000.0.0
+  - Name: Liftoff
+    Package: vungle
+    AndroidVersion: 7070200.0.0
+    IOSVersion: 7070200.0.0
+  - Name: Mintegral
+    Package: mintegral
+    AndroidVersion: 17015100.0.0
+    IOSVersion: 801010000.0.0
+  - Name: Pangle
+    Package: bytedance
+    AndroidVersion: 709010300.0.0
+    IOSVersion: 709010200.0.0
+  - Name: Unity Ads
+    Package: unityads
+    AndroidVersion: 4170000.0.0
+    IOSVersion: 4170000.0.0
+  - Name: Verve
+    Package: verve
+    AndroidVersion: 3080100.0.0
+    IOSVersion: 3080000.0.0
+  - Name: Yandex
+    Package: yandex
+    AndroidVersion: 7180500.0.0
+    IOSVersion: 7180400.0.0
