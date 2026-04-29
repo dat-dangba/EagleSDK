@@ -16,7 +16,7 @@ namespace Eagle
         private const float width = 800;
         private const float height = 650;
 
-        private string[] tabs = { "General", "Adjust", "MAX", "Analytics" };
+        private string[] tabs = { "General", "Adjust", "MAX", "Eagle Analytics" };
 
         [MenuItem("Eagle/Eagle Integration Manager %#e")]
         public static void ShowWindow()
@@ -106,16 +106,16 @@ namespace Eagle
                 case "MAX":
                     DrawSetting<MAXSetting>();
                     break;
-                case "Analytics":
-                    DrawAdjustAnalytics();
+                case "Eagle Analytics":
+                    DrawEagleAnalytics();
                     break;
             }
         }
 
-        private void DrawAdjustAnalytics()
+        private void DrawEagleAnalytics()
         {
 #if HAS_EAGLE_ANALYTICS
-            DrawSetting("AdjustSetting");
+            DrawSetting("EagleAnalyticsSetting");
 #elif !HAS_ADJUST_SDK
             DrawSetting<AdjustSetting>();
 #else
