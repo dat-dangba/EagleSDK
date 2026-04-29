@@ -143,15 +143,15 @@ namespace Eagle
 
         private void DrawSetting<T>() where T : EagleEditorSettingBase
         {
-            ScriptableObject generalSetting = EagleServices.GetSetting<T>();
-            SerializedObject generalSettingSerialized = new SerializedObject(generalSetting);
-            InspectorElement generalSettingInspector = new InspectorElement(generalSettingSerialized);
-            generalSettingInspector.Bind(generalSettingSerialized);
-            generalSettingInspector.style.paddingLeft = 0;
-            generalSettingInspector.style.paddingRight = 0;
-            generalSettingInspector.style.paddingTop = 0;
-            generalSettingInspector.style.paddingBottom = 0;
-            content.Add(generalSettingInspector);
+            T setting = EagleServices.GetSetting<T>();
+            SerializedObject settingSerialized = new SerializedObject(setting);
+            InspectorElement settingInspector = new InspectorElement(settingSerialized);
+            settingInspector.Bind(settingSerialized);
+            settingInspector.style.paddingLeft = 0;
+            settingInspector.style.paddingRight = 0;
+            settingInspector.style.paddingTop = 0;
+            settingInspector.style.paddingBottom = 0;
+            content.Add(settingInspector);
         }
 
         private Label GetHeaderLabel()

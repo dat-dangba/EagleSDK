@@ -18,7 +18,11 @@ namespace Eagle
 
             string path = $"{Constant.SettingsFolder}/{typeof(T).Name}";
             T t = Resources.Load<T>(path);
-            editorSettings.Add(typeof(T), t);
+            if (t != null)
+            {
+                editorSettings.Add(typeof(T), t);
+            }
+
             return t;
         }
 
