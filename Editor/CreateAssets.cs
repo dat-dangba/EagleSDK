@@ -15,9 +15,13 @@ namespace Eagle
         {
 #if HAS_ADJUST_SDK
             AdjustSettings adjustSettings = AdjustSettings.Instance;
+            AdjustSettings.iOSFrameworkAdSupport = true;
+            AdjustSettings.iOSFrameworkAdServices = true;
+            AdjustSettings.iOSFrameworkAdServices = true;
+            AdjustSettings.iOSFrameworkAppTrackingTransparency = true;
+            AdjustSettings.iOSFrameworkStoreKit = true;
 #endif
             CreateAsset<GeneralSetting>(Constant.SettingsFolder);
-            CreateAsset<MAXSetting>(Constant.SettingsFolder);
             CreateAsset<AdjustSetting>(Constant.SettingsFolder);
         }
 

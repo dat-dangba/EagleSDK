@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -104,12 +105,58 @@ namespace Eagle
                     DrawSetting<AdjustSetting>();
                     break;
                 case "MAX":
-                    DrawSetting<MAXSetting>();
+                    DrawEagleAds();
                     break;
                 case "Eagle Analytics":
                     DrawEagleAnalytics();
                     break;
             }
+        }
+
+        private void DrawEagleAds()
+        {
+#if HAS_MAX_SDK
+            DrawSetting("MAXSetting");
+#else
+            InstallPackage(
+                "MAX Sdk is not installed.",
+                "Install MAX Sdk",
+                () =>
+                {
+                    string token = EagleServices.GetSetting<GeneralSetting>().SDKToken;
+                    if (string.IsNullOrEmpty(token))
+                    {
+                        EagleLog.Log("Nhập Token trước khi cài package");
+                        return;
+                    }
+
+                    AddRegistry();
+
+                    var packages = new List<string>
+                    {
+                        "com.applovin.mediation.ads@8.6.2",
+                        $"https://{token}@github.com/dat-dangba/EagleAds.git"
+                    };
+
+                    InstallPackageHelper.Install(packages);
+                });
+#endif
+        }
+
+        private void AddRegistry()
+        {
+            var maxRegistry = new ScopedRegistry
+            {
+                name = "AppLovin MAX Unity",
+                url = "https://unity.packages.applovin.com",
+                scopes = new List<string>
+                {
+                    "com.applovin.mediation.ads",
+                    "com.applovin.mediation.adapters",
+                    "com.applovin.mediation.dsp"
+                }
+            };
+            RegistryHelper.AddRegistry(maxRegistry);
         }
 
         private void DrawEagleAnalytics()
