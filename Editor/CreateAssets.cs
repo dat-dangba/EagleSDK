@@ -21,6 +21,9 @@ namespace Eagle
             AdjustSettings.iOSFrameworkAppTrackingTransparency = true;
             AdjustSettings.iOSFrameworkStoreKit = true;
 #endif
+#if HAS_MAX_SDK
+            CreateAsset<MAXSetting>(Constant.SettingsFolder);
+#endif
             CreateAsset<GeneralSetting>(Constant.SettingsFolder);
             CreateAsset<AdjustSetting>(Constant.SettingsFolder);
         }
