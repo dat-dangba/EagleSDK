@@ -1,0 +1,20 @@
+{
+    "name": "EagleSDK.Editor",
+    "rootNamespace": "Eagle",
+    "references": [
+        "MaxSdk.Scripts.IntegrationManager.Editor",
+        "MaxSdk.Scripts",
+        "EagleSDK"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
