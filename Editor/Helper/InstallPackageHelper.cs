@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityEditor.PackageManager;
 using UnityEditor.PackageManager.Requests;
@@ -12,6 +13,11 @@ namespace Eagle
         private static AddRequest currentRequest;
 
         private static event Action OnInstallCompleted;
+
+        public static bool IsPackageInstalled(string PackageId)
+        {
+            return Directory.Exists($"Packages/{PackageId}");
+        }
 
         public static void Install(string package, Action completed = null)
         {
@@ -44,6 +50,7 @@ namespace Eagle
             }
 
             string nextPackage = packagesToInstall.Dequeue();
+            EagleLog.Log($"Bắt đầu cài đặt {nextPackage}");
             currentRequest = Client.Add(nextPackage);
 
             EditorApplication.update += ProgressCheck;
@@ -57,7 +64,7 @@ namespace Eagle
 
             if (currentRequest.Status == StatusCode.Success)
             {
-                EagleLog.Log($"Đã cài xong: {currentRequest.Result.packageId}");
+                EagleLog.Log($"Đã cài xong {currentRequest.Result.packageId}");
             }
             else
             {

@@ -1,7 +1,10 @@
-#if UNITY_EDITOR
 using System.IO;
 using UnityEditor;
 using UnityEngine;
+#if HAS_ADJUST_SDK
+using AdjustSdk;
+#endif
+
 
 namespace Eagle
 {
@@ -10,8 +13,12 @@ namespace Eagle
     {
         static CreateAssets()
         {
+#if HAS_ADJUST_SDK
+            AdjustSettings adjustSettings = AdjustSettings.Instance;
+#endif
             CreateAsset<GeneralSetting>(Constant.SettingsFolder);
             CreateAsset<MAXSetting>(Constant.SettingsFolder);
+            CreateAsset<AdjustSetting>(Constant.SettingsFolder);
         }
 
         public static T CreateAsset<T>(string folderPath) where T : ScriptableObject
@@ -40,4 +47,3 @@ namespace Eagle
         }
     }
 }
-#endif

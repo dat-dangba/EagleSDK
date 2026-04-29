@@ -32,23 +32,10 @@ namespace Eagle
 
         public static bool IsEDM4UInstalled()
         {
-            return Directory.Exists($"Packages/{PackageId}");
+            return InstallPackageHelper.IsPackageInstalled(PackageId);
         }
 
-        public static void ShowDialogSetupEDM4U()
-        {
-            bool userConfirm = EditorUtility.DisplayDialog(
-                "EagleSDK Dependency Check",
-                "EagleSDK cần package 'External Dependency Manager' (EDM4U) để hoạt động. Bạn có muốn cài đặt nó ngay không?",
-                "Cài đặt ngay"
-            );
-            if (userConfirm)
-            {
-                InstallEDM4U();
-            }
-        }
-
-        private static void InstallEDM4U()
+        public static void InstallEDM4U()
         {
             AddRegistry();
             Debug.Log($"{Tag} - Đang bắt đầu cài đặt EDM4U...");

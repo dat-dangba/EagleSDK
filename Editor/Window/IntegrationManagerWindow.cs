@@ -16,7 +16,7 @@ namespace Eagle
         private const float width = 800;
         private const float height = 650;
 
-        private string[] tabs = { "General", "MAX", "Analytics" };
+        private string[] tabs = { "General", "Adjust", "MAX", "Analytics" };
 
         [MenuItem("Eagle/Eagle Integration Manager %#e")]
         public static void ShowWindow()
@@ -34,6 +34,12 @@ namespace Eagle
         private void CreateGUI()
         {
             VisualElement root = rootVisualElement;
+            if (!EDM4UManager.IsEDM4UInstalled())
+            {
+                DrawInstallEDM4U(root);
+                return;
+            }
+
             root.style.flexDirection = FlexDirection.Column;
             root.style.backgroundColor = Color.black;
 
@@ -56,6 +62,31 @@ namespace Eagle
             ShowConfig(currentLabel.text);
         }
 
+        private void DrawInstallEDM4U(VisualElement root)
+        {
+            Label label = new Label("EDM4U is not installed.")
+            {
+                style =
+                {
+                    height = 30,
+                    backgroundColor = new Color(0.345098f, 0.345098f, 0.345098f),
+                    color = Color.red,
+                    unityFontStyleAndWeight = FontStyle.Bold,
+                    unityTextAlign = TextAnchor.MiddleCenter,
+                }
+            };
+            root.Add(label);
+            Button installMediatedNetworksButton = new Button(EDM4UManager.InstallEDM4U)
+            {
+                text = "Install EDM4U",
+                style =
+                {
+                    marginTop = 20
+                }
+            };
+            root.Add(installMediatedNetworksButton);
+        }
+
         private void ShowConfig(string labelText)
         {
             if (header != null)
@@ -68,6 +99,9 @@ namespace Eagle
             {
                 case "General":
                     DrawSetting<GeneralSetting>();
+                    break;
+                case "Adjust":
+                    DrawSetting<AdjustSetting>();
                     break;
                 case "MAX":
                     DrawSetting<MAXSetting>();
@@ -82,9 +116,11 @@ namespace Eagle
         {
 #if HAS_EAGLE_ANALYTICS
             DrawSetting("AdjustSetting");
+#elif !HAS_ADJUST_SDK
+            DrawSetting<AdjustSetting>();
 #else
             InstallPackage(
-                "Eagle Analytics Sdk is not install",
+                "Eagle Analytics Sdk is not installed.",
                 "Install Eagle Analytics Sdk",
                 InstallEagleAnalyticsSDK);
 #endif

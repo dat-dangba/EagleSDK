@@ -14,6 +14,7 @@ namespace Eagle
         {
             { "HAS_MAX_SDK", "com.applovin.mediation.ads" },
             { "HAS_EAGLE_ANALYTICS", "com.eagle.analytics" },
+            { "HAS_ADJUST_SDK", "com.adjust.sdk" },
         };
 
         static SdkDetector()

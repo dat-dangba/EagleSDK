@@ -30,12 +30,6 @@ namespace Eagle
         private void DrawInspector()
         {
             root.Clear();
-            if (!EDM4UManager.IsEDM4UInstalled())
-            {
-                DrawInstallEDM4U();
-                return;
-            }
-
             if (!IsMAXInstalled())
             {
                 DrawInstallMAX();
@@ -45,30 +39,6 @@ namespace Eagle
             DrawMAXSetting();
         }
 
-        private void DrawInstallEDM4U()
-        {
-            Label label = new Label("EDM4U is not install")
-            {
-                style =
-                {
-                    height = 30,
-                    backgroundColor = new Color(0.345098f, 0.345098f, 0.345098f),
-                    color = Color.red,
-                    unityFontStyleAndWeight = FontStyle.Bold,
-                    unityTextAlign = TextAnchor.MiddleCenter,
-                }
-            };
-            root.Add(label);
-            Button installMediatedNetworksButton = new Button(EDM4UManager.ShowDialogSetupEDM4U)
-            {
-                text = "Install EDM4U",
-                style =
-                {
-                    marginTop = 20
-                }
-            };
-            root.Add(installMediatedNetworksButton);
-        }
 
         private void DrawMAXSetting()
         {
