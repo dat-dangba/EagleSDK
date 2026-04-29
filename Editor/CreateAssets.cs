@@ -12,7 +12,6 @@ namespace Eagle
         {
             CreateAsset<GeneralSetting>(Constant.SettingsFolder);
             CreateAsset<MAXSetting>(Constant.SettingsFolder);
-            CreateAsset<AdjustAnalyticsSetting>(Constant.SettingsFolder);
         }
 
         public static T CreateAsset<T>(string folderPath) where T : ScriptableObject
@@ -27,7 +26,7 @@ namespace Eagle
             ScriptableObject asset = ScriptableObject.CreateInstance(typeof(T));
             AssetDatabase.CreateAsset(asset, fullPath);
             AssetDatabase.SaveAssets();
-            Debug.Log($"EagleSDK - Create {configName}: {fullPath}");
+            EagleLog.Log($"Create {configName}: {fullPath}", LogLevel.Verbose);
             return asset as T;
         }
 

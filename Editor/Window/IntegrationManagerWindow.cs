@@ -1,3 +1,4 @@
+using System;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -72,9 +73,72 @@ namespace Eagle
                     DrawSetting<MAXSetting>();
                     break;
                 case "Analytics":
-                    DrawSetting<AdjustAnalyticsSetting>();
+                    DrawAdjustAnalytics();
                     break;
             }
+        }
+
+        private void DrawAdjustAnalytics()
+        {
+#if HAS_EAGLE_ANALYTICS
+            DrawSetting("AdjustSetting");
+#else
+            InstallPackage(
+                "Eagle Analytics Sdk is not install",
+                "Install Eagle Analytics Sdk",
+                InstallEagleAnalyticsSDK);
+#endif
+        }
+
+        private void InstallPackage(string mess, string textButton, Action clickEvent)
+        {
+            Label label = new Label(mess)
+            {
+                style =
+                {
+                    height = 30,
+                    backgroundColor = new Color(0.345098f, 0.345098f, 0.345098f),
+                    color = Color.red,
+                    unityFontStyleAndWeight = FontStyle.Bold,
+                    unityTextAlign = TextAnchor.MiddleCenter,
+                }
+            };
+            content.Add(label);
+            Button installEagleAnalytics = new Button(clickEvent)
+            {
+                text = textButton,
+                style =
+                {
+                    marginTop = 20
+                }
+            };
+            content.Add(installEagleAnalytics);
+        }
+
+        private void InstallEagleAnalyticsSDK()
+        {
+            string token = EagleServices.GetSetting<GeneralSetting>().SDKToken;
+            if (string.IsNullOrEmpty(token))
+            {
+                EagleLog.Log("Nhập Token trước khi cài package");
+                return;
+            }
+
+            InstallPackageHelper.Install($"https://{token}@github.com/dat-dangba/EagleAnalytics.git");
+        }
+
+        private void DrawSetting(string name)
+        {
+            ScriptableObject adjustSetting = EagleServices.GetSetting<SdkInitSettingBase>(name);
+            SerializedObject adjustSettingSerialized = new SerializedObject(adjustSetting);
+            InspectorElement inspector = new InspectorElement(adjustSettingSerialized);
+            inspector.Bind(adjustSettingSerialized);
+            inspector.style.paddingLeft = 0;
+            inspector.style.paddingLeft = 0;
+            inspector.style.paddingRight = 0;
+            inspector.style.paddingTop = 0;
+            inspector.style.paddingBottom = 0;
+            content.Add(inspector);
         }
 
         private void DrawSetting<T>() where T : EagleEditorSettingBase
@@ -83,6 +147,10 @@ namespace Eagle
             SerializedObject generalSettingSerialized = new SerializedObject(generalSetting);
             InspectorElement generalSettingInspector = new InspectorElement(generalSettingSerialized);
             generalSettingInspector.Bind(generalSettingSerialized);
+            generalSettingInspector.style.paddingLeft = 0;
+            generalSettingInspector.style.paddingRight = 0;
+            generalSettingInspector.style.paddingTop = 0;
+            generalSettingInspector.style.paddingBottom = 0;
             content.Add(generalSettingInspector);
         }
 
@@ -127,6 +195,9 @@ namespace Eagle
                 style =
                 {
                     paddingTop = 10,
+                    paddingBottom = 10,
+                    paddingLeft = 10,
+                    paddingRight = 10,
                     marginLeft = 1,
                     flexGrow = 1,
                     backgroundColor = contentColor
