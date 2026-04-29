@@ -17,7 +17,7 @@ namespace Eagle
         private const float width = 800;
         private const float height = 650;
 
-        private string[] tabs = { "General", "Adjust", "MAX", "Eagle Analytics" };
+        private string[] tabs = { "General", "Adjust", "MAX", "Eagle Analytics", "Eagle Ads" };
 
         [MenuItem("Eagle/Eagle Integration Manager %#e")]
         public static void ShowWindow()
@@ -105,22 +105,32 @@ namespace Eagle
                     DrawSetting<AdjustSetting>();
                     break;
                 case "MAX":
-                    DrawEagleAds();
+                    DrawEagleAds(labelText);
                     break;
                 case "Eagle Analytics":
                     DrawEagleAnalytics();
                     break;
+                case "Eagle Ads":
+                    DrawEagleAds(labelText);
+                    break;
             }
         }
 
-        private void DrawEagleAds()
+        private void DrawEagleAds(string labelText)
         {
-#if HAS_MAX_SDK
-            DrawSetting("MAXSetting");
-#else
+#if !HAS_MAX_SDK
             InstallPackage(
                 "MAX Sdk is not installed.",
                 "Install MAX Sdk",
+                () =>
+                {
+                    AddRegistry();
+                    InstallPackageHelper.Install("com.applovin.mediation.ads@8.6.2");
+                });
+#elif !HAS_EAGLE_ADS
+            InstallPackage(
+                "Eagle Ads Sdk is not installed.",
+                "Install Eagle Ads Sdk",
                 () =>
                 {
                     string token = EagleServices.GetSetting<GeneralSetting>().SDKToken;
@@ -130,16 +140,17 @@ namespace Eagle
                         return;
                     }
 
-                    AddRegistry();
-
-                    var packages = new List<string>
-                    {
-                        "com.applovin.mediation.ads@8.6.2",
-                        $"https://{token}@github.com/dat-dangba/EagleAds.git"
-                    };
-
-                    InstallPackageHelper.Install(packages);
+                    InstallPackageHelper.Install($"https://{token}@github.com/dat-dangba/EagleAds.git");
                 });
+#else
+            if (labelText == "MAX")
+            {
+                DrawSetting("MAXSetting");
+            }
+            else
+            {
+                DrawSetting("MAXSetting");
+            }
 #endif
         }
 
