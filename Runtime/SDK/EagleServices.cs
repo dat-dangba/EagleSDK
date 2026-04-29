@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace Eagle
@@ -18,9 +19,9 @@ namespace Eagle
 
             string path = $"{Constant.SettingsFolder}/{typeof(T).Name}";
             T t = Resources.Load<T>(path);
-            if (t != null)
+            if (t != null && !editorSettings.ContainsKey(t.GetType()))
             {
-                editorSettings.Add(typeof(T), t);
+                editorSettings.Add(t.GetType(), t);
             }
 
             return t;
@@ -35,7 +36,11 @@ namespace Eagle
 
             string path = $"{Constant.SettingsFolder}/{name}";
             T t = Resources.Load<T>(path);
-            editorSettings.Add(typeof(T), t);
+            if (t != null && !editorSettings.ContainsKey(t.GetType()))
+            {
+                editorSettings.Add(t.GetType(), t);
+            }
+
             return t;
         }
 
@@ -48,7 +53,11 @@ namespace Eagle
 
             string path = $"{Constant.BuildConfigFolder}/{typeof(T).Name}";
             T t = Resources.Load<T>(path);
-            buildConfigs.Add(typeof(T), t);
+            if (t != null && !buildConfigs.ContainsKey(t.GetType()))
+            {
+                buildConfigs.Add(t.GetType(), t);
+            }
+
             return t;
         }
 
@@ -61,7 +70,11 @@ namespace Eagle
 
             string path = $"{Constant.BuildConfigFolder}/{name}";
             T t = Resources.Load<T>(path);
-            buildConfigs.Add(typeof(T), t);
+            if (t != null && !buildConfigs.ContainsKey(t.GetType()))
+            {
+                buildConfigs.Add(t.GetType(), t);
+            }
+
             return t;
         }
     }

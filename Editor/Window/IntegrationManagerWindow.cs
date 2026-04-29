@@ -135,6 +135,8 @@ namespace Eagle
 
                     InstallPackageHelper.Install($"https://{token}@github.com/dat-dangba/EagleAds.git");
                 });
+#else
+            DrawSetting("EagleAdsSetting");
 #endif
         }
 
@@ -224,10 +226,10 @@ namespace Eagle
 
         private void DrawSetting(string name)
         {
-            ScriptableObject adjustSetting = EagleServices.GetSetting<SdkInitSettingBase>(name);
-            SerializedObject adjustSettingSerialized = new SerializedObject(adjustSetting);
-            InspectorElement inspector = new InspectorElement(adjustSettingSerialized);
-            inspector.Bind(adjustSettingSerialized);
+            ScriptableObject scriptableObject = EagleServices.GetSetting<EagleEditorSettingBase>(name);
+            SerializedObject serialized = new SerializedObject(scriptableObject);
+            InspectorElement inspector = new InspectorElement(serialized);
+            inspector.Bind(serialized);
             inspector.style.paddingLeft = 0;
             inspector.style.paddingLeft = 0;
             inspector.style.paddingRight = 0;
