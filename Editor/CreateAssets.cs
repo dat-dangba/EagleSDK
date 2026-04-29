@@ -12,6 +12,7 @@ namespace Eagle
         {
             CreateAsset<GeneralSetting>(Constant.SettingsFolder);
             CreateAsset<MAXSetting>(Constant.SettingsFolder);
+            CreateAsset<AdjustAnalyticsSetting>(Constant.SettingsFolder);
         }
 
         public static T CreateAsset<T>(string folderPath) where T : ScriptableObject
