@@ -1,5 +1,5 @@
 {
-    "name": "EagleSDK",
+    "name": "EagleSDK.Scripts",
     "rootNamespace": "Eagle",
     "references": [
         "MaxSdk.Scripts.IntegrationManager.Editor",

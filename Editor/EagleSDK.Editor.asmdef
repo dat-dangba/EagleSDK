@@ -4,7 +4,7 @@
     "references": [
         "MaxSdk.Scripts.IntegrationManager.Editor",
         "MaxSdk.Scripts",
-        "EagleSDK"
+        "EagleSDK.Scripts"
     ],
     "includePlatforms": [
         "Editor"
