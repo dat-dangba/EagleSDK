@@ -1,9 +1,9 @@
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
+using UnityEngine;
 #if HAS_MAX_SDK
 using AppLovinMax.Scripts.IntegrationManager.Editor;
-using UnityEngine;
 #endif
 
 namespace Eagle
