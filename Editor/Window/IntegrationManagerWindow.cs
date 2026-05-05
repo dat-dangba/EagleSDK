@@ -17,7 +17,8 @@ namespace Eagle
         private const float width = 800;
         private const float height = 650;
 
-        private string[] tabs = { "General", "Adjust", "MAX", "Eagle Analytics", "Eagle Ads" };
+        private string[] tabs =
+            { "General", "Adjust", "MAX", "Eagle Analytics", "Eagle Ads", "Eagle IAP" };
 
         [MenuItem("Eagle/Eagle Integration Manager %#e")]
         public static void ShowWindow()
@@ -113,7 +114,32 @@ namespace Eagle
                 case "Eagle Ads":
                     DrawEagleAds();
                     break;
+                case "Eagle IAP":
+                    DrawEagleIAP();
+                    break;
             }
+        }
+
+        private void DrawEagleIAP()
+        {
+#if HAS_EAGLE_IAP
+            DrawSetting<EagleIAPSetting>();
+#else
+            InstallPackage(
+                "Eagle IAP Sdk is not installed.",
+                "Install Eagle IAP Sdk",
+                () =>
+                {
+                    string token = EagleServices.GetSetting<GeneralSetting>().SDKToken;
+                    if (string.IsNullOrEmpty(token))
+                    {
+                        EagleLog.Log("Nhập Token trước khi cài package");
+                        return;
+                    }
+
+                    InstallPackageHelper.Install($"https://{token}@github.com/dat-dangba/EagleIAP.git");
+                });
+#endif
         }
 
         private void DrawEagleAds()
@@ -136,7 +162,7 @@ namespace Eagle
                     InstallPackageHelper.Install($"https://{token}@github.com/dat-dangba/EagleAds.git");
                 });
 #else
-            DrawSetting("EagleAdsSetting");
+            DrawSetting<EagleAdsSetting>();
 #endif
         }
 
@@ -176,7 +202,7 @@ namespace Eagle
         private void DrawEagleAnalytics()
         {
 #if HAS_EAGLE_ANALYTICS
-            DrawSetting("EagleAnalyticsSetting");
+            DrawSetting<EagleAnalyticsSetting>();
 #elif !HAS_ADJUST_SDK
             DrawSetting<AdjustSetting>();
 #else
@@ -222,20 +248,6 @@ namespace Eagle
             }
 
             InstallPackageHelper.Install($"https://{token}@github.com/dat-dangba/EagleAnalytics.git");
-        }
-
-        private void DrawSetting(string name)
-        {
-            ScriptableObject scriptableObject = EagleServices.GetSetting<EagleEditorSettingBase>(name);
-            SerializedObject serialized = new SerializedObject(scriptableObject);
-            InspectorElement inspector = new InspectorElement(serialized);
-            inspector.Bind(serialized);
-            inspector.style.paddingLeft = 0;
-            inspector.style.paddingLeft = 0;
-            inspector.style.paddingRight = 0;
-            inspector.style.paddingTop = 0;
-            inspector.style.paddingBottom = 0;
-            content.Add(inspector);
         }
 
         private void DrawSetting<T>() where T : EagleEditorSettingBase
@@ -293,8 +305,8 @@ namespace Eagle
                 {
                     paddingTop = 10,
                     paddingBottom = 10,
-                    paddingLeft = 10,
-                    paddingRight = 10,
+                    paddingLeft = 20,
+                    paddingRight = 20,
                     marginLeft = 1,
                     flexGrow = 1,
                     backgroundColor = contentColor

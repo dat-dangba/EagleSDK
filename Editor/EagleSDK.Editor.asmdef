@@ -5,7 +5,10 @@
         "MaxSdk.Scripts.IntegrationManager.Editor",
         "MaxSdk.Scripts",
         "EagleSDK.Scripts",
-        "AdjustSdk.Editor"
+        "AdjustSdk.Editor",
+        "EagleIAP.Scripts",
+        "EagleAds.Scripts",
+        "EagleAnalytics.Scripts"
     ],
     "includePlatforms": [
         "Editor"
