@@ -64,31 +64,6 @@ namespace Eagle
             ShowConfig(currentLabel.text);
         }
 
-        private void DrawInstallEDM4U(VisualElement root)
-        {
-            Label label = new Label("EDM4U is not installed.")
-            {
-                style =
-                {
-                    height = 30,
-                    backgroundColor = new Color(0.345098f, 0.345098f, 0.345098f),
-                    color = Color.red,
-                    unityFontStyleAndWeight = FontStyle.Bold,
-                    unityTextAlign = TextAnchor.MiddleCenter,
-                }
-            };
-            root.Add(label);
-            Button installMediatedNetworksButton = new Button(EDM4UManager.InstallEDM4U)
-            {
-                text = "Install EDM4U",
-                style =
-                {
-                    marginTop = 20
-                }
-            };
-            root.Add(installMediatedNetworksButton);
-        }
-
         private void ShowConfig(string labelText)
         {
             if (header != null)
@@ -120,67 +95,51 @@ namespace Eagle
             }
         }
 
-        private void DrawEagleIAP()
-        {
-#if HAS_EAGLE_IAP
-            DrawSetting<EagleIAPSetting>();
-#else
-            InstallPackage(
-                "Eagle IAP Sdk is not installed.",
-                "Install Eagle IAP Sdk",
-                () =>
-                {
-                    string token = EagleServices.GetSetting<GeneralSetting>().SDKToken;
-                    if (string.IsNullOrEmpty(token))
-                    {
-                        EagleLog.Log("Nhập Token trước khi cài package");
-                        return;
-                    }
+        #region EDM4U
 
-                    InstallPackageHelper.Install($"https://{token}@github.com/dat-dangba/EagleIAP.git");
-                });
-#endif
+        private void DrawInstallEDM4U(VisualElement root)
+        {
+            Label label = new Label("EDM4U is not installed.")
+            {
+                style =
+                {
+                    height = 30,
+                    backgroundColor = new Color(0.345098f, 0.345098f, 0.345098f),
+                    color = Color.red,
+                    unityFontStyleAndWeight = FontStyle.Bold,
+                    unityTextAlign = TextAnchor.MiddleCenter,
+                }
+            };
+            root.Add(label);
+            Button installMediatedNetworksButton = new Button(EDM4UManager.InstallEDM4U)
+            {
+                text = "Install EDM4U",
+                style =
+                {
+                    marginTop = 20
+                }
+            };
+            root.Add(installMediatedNetworksButton);
         }
 
-        private void DrawEagleAds()
-        {
-#if !HAS_MAX_SDK
-            DrawMAXSettings();
-#elif !HAS_EAGLE_ADS
-            InstallPackage(
-                "Eagle Ads Sdk is not installed.",
-                "Install Eagle Ads Sdk",
-                () =>
-                {
-                    string token = EagleServices.GetSetting<GeneralSetting>().SDKToken;
-                    if (string.IsNullOrEmpty(token))
-                    {
-                        EagleLog.Log("Nhập Token trước khi cài package");
-                        return;
-                    }
+        #endregion
 
-                    InstallPackageHelper.Install($"https://{token}@github.com/dat-dangba/EagleAds.git");
-                });
-#else
-            DrawSetting<EagleAdsSetting>();
-#endif
-        }
+        #region MAXSetting
 
         private void DrawMAXSettings()
         {
 #if HAS_MAX_SDK
             DrawSetting<MAXSetting>();
 #else
-            InstallPackage(
-                "MAX Sdk is not installed.",
-                "Install MAX Sdk",
-                () =>
-                {
-                    AddRegistry();
-                    InstallPackageHelper.Install("com.applovin.mediation.ads@8.6.2",
-                        () => { CreateAssets.CreateAsset<MAXSetting>(Constant.SettingsFolder); });
-                });
+            content.Add(new InstallPackageVisualElement("MAX Sdk", InstallMAXSdk));
 #endif
+        }
+
+        private void InstallMAXSdk()
+        {
+            AddRegistry();
+            InstallPackageHelper.Install("com.applovin.mediation.ads",
+                () => { CreateAssets.CreateAsset<MAXSetting>(Constant.SettingsFolder); });
         }
 
         private void AddRegistry()
@@ -199,6 +158,10 @@ namespace Eagle
             RegistryHelper.AddRegistry(maxRegistry);
         }
 
+        #endregion
+
+        #region EagleAnalytics
+
         private void DrawEagleAnalytics()
         {
 #if HAS_EAGLE_ANALYTICS
@@ -206,36 +169,8 @@ namespace Eagle
 #elif !HAS_ADJUST_SDK
             DrawSetting<AdjustSetting>();
 #else
-            InstallPackage(
-                "Eagle Analytics Sdk is not installed.",
-                "Install Eagle Analytics Sdk",
-                InstallEagleAnalyticsSDK);
+            content.Add(new InstallPackageVisualElement("Eagle Analytics Sdk", InstallEagleAnalyticsSDK));
 #endif
-        }
-
-        private void InstallPackage(string mess, string textButton, Action clickEvent)
-        {
-            Label label = new Label(mess)
-            {
-                style =
-                {
-                    height = 30,
-                    backgroundColor = new Color(0.345098f, 0.345098f, 0.345098f),
-                    color = Color.red,
-                    unityFontStyleAndWeight = FontStyle.Bold,
-                    unityTextAlign = TextAnchor.MiddleCenter,
-                }
-            };
-            content.Add(label);
-            Button installEagleAnalytics = new Button(clickEvent)
-            {
-                text = textButton,
-                style =
-                {
-                    marginTop = 20
-                }
-            };
-            content.Add(installEagleAnalytics);
         }
 
         private void InstallEagleAnalyticsSDK()
@@ -250,18 +185,61 @@ namespace Eagle
             InstallPackageHelper.Install($"https://{token}@github.com/dat-dangba/EagleAnalytics.git");
         }
 
-        private void DrawSetting<T>() where T : EagleEditorSettingBase
+        #endregion
+
+        #region EagleAds
+
+        private void DrawEagleAds()
         {
-            T setting = EagleServices.GetSetting<T>();
-            SerializedObject settingSerialized = new SerializedObject(setting);
-            InspectorElement settingInspector = new InspectorElement(settingSerialized);
-            settingInspector.Bind(settingSerialized);
-            settingInspector.style.paddingLeft = 0;
-            settingInspector.style.paddingRight = 0;
-            settingInspector.style.paddingTop = 0;
-            settingInspector.style.paddingBottom = 0;
-            content.Add(settingInspector);
+#if !HAS_MAX_SDK
+            DrawMAXSettings();
+#elif !HAS_EAGLE_ADS
+            content.Add(new InstallPackageVisualElement("Eagle Ads Sdk", InstallEagleAds));
+#else
+            DrawSetting<EagleAdsSetting>();
+#endif
         }
+
+        private void InstallEagleAds()
+        {
+            string token = EagleServices.GetSetting<GeneralSetting>().SDKToken;
+            if (string.IsNullOrEmpty(token))
+            {
+                EagleLog.Log("Nhập Token trước khi cài package");
+                return;
+            }
+
+            InstallPackageHelper.Install($"https://{token}@github.com/dat-dangba/EagleAds.git");
+        }
+
+        #endregion
+
+        #region EagleIAP
+
+        private void DrawEagleIAP()
+        {
+#if HAS_EAGLE_IAP
+            DrawSetting<EagleIAPSetting>();
+#else
+            content.Add(new InstallPackageVisualElement("Eagle IAP Sdk", InstallEagleIAP));
+#endif
+        }
+
+        private void InstallEagleIAP()
+        {
+            string token = EagleServices.GetSetting<GeneralSetting>().SDKToken;
+            if (string.IsNullOrEmpty(token))
+            {
+                EagleLog.Log("Nhập Token trước khi cài package");
+                return;
+            }
+
+            InstallPackageHelper.Install($"https://{token}@github.com/dat-dangba/EagleIAP.git");
+        }
+
+        #endregion
+
+        #region UI Window
 
         private Label GetHeaderLabel()
         {
@@ -398,5 +376,20 @@ namespace Eagle
             };
             return topPanel;
         }
+
+        private void DrawSetting<T>() where T : EagleEditorSettingBase
+        {
+            T setting = EagleServices.GetSetting<T>();
+            SerializedObject settingSerialized = new SerializedObject(setting);
+            InspectorElement settingInspector = new InspectorElement(settingSerialized);
+            settingInspector.Bind(settingSerialized);
+            settingInspector.style.paddingLeft = 0;
+            settingInspector.style.paddingRight = 0;
+            settingInspector.style.paddingTop = 0;
+            settingInspector.style.paddingBottom = 0;
+            content.Add(settingInspector);
+        }
+
+        #endregion
     }
 }

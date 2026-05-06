@@ -9,7 +9,7 @@ namespace Eagle
     public class AdjustSettingEditor : EagleSettingEditor
     {
         private const string PackageId = "com.adjust.sdk";
-        private const string LinkInstall = "https://github.com/adjust/unity_sdk.git?path=Assets/Adjust#v5.6.0";
+        private const string LinkInstall = "https://github.com/adjust/unity_sdk.git?path=Assets/Adjust";
 
         public override VisualElement CreateInspectorGUI()
         {
@@ -19,42 +19,11 @@ namespace Eagle
 
             if (InstallPackageHelper.IsPackageInstalled(PackageId))
             {
-                Label label = new Label("Adjust has been installed.")
-                {
-                    style =
-                    {
-                        height = 30,
-                        backgroundColor = new Color(0.345098f, 0.345098f, 0.345098f),
-                        color = Color.green,
-                        unityFontStyleAndWeight = FontStyle.Bold,
-                        unityTextAlign = TextAnchor.MiddleCenter,
-                    }
-                };
-                root.Add(label);
+                root.Add(new PackageInstalledVisualElement("Adjust"));
             }
             else
             {
-                Label label = new Label("Adjust is not installed.")
-                {
-                    style =
-                    {
-                        height = 30,
-                        backgroundColor = new Color(0.345098f, 0.345098f, 0.345098f),
-                        color = Color.red,
-                        unityFontStyleAndWeight = FontStyle.Bold,
-                        unityTextAlign = TextAnchor.MiddleCenter,
-                    }
-                };
-                root.Add(label);
-                Button installAdjust = new Button(InstallAdjust)
-                {
-                    text = "Install Adjust",
-                    style =
-                    {
-                        marginTop = 20
-                    }
-                };
-                root.Add(installAdjust);
+                root.Add(new InstallPackageVisualElement("Adjust", InstallAdjust));
             }
 
             HideScript(root);
@@ -64,9 +33,7 @@ namespace Eagle
 
         private void InstallAdjust()
         {
-            InstallPackageHelper.Install(LinkInstall, () =>
-            {
-            });
+            InstallPackageHelper.Install(LinkInstall, () => { });
         }
     }
 }
