@@ -8,7 +8,8 @@
         "AdjustSdk.Editor",
         "EagleIAP.Scripts",
         "EagleAds.Scripts",
-        "EagleAnalytics.Scripts"
+        "EagleAnalytics.Scripts",
+        "EagleFirebaseApp.Scripts"
     ],
     "includePlatforms": [
         "Editor"

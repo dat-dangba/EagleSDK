@@ -18,7 +18,7 @@ namespace Eagle
         private const float height = 650;
 
         private string[] tabs =
-            { "General", "Adjust", "MAX", "Eagle Analytics", "Eagle Ads", "Eagle IAP" };
+            { "General", "Adjust", "MAX", "Eagle Analytics", "Eagle Ads", "Eagle IAP", "Eagle Firebase" };
 
         [MenuItem("Eagle/Eagle Integration Manager %#e")]
         public static void ShowWindow()
@@ -91,6 +91,9 @@ namespace Eagle
                     break;
                 case "Eagle IAP":
                     DrawEagleIAP();
+                    break;
+                case "Eagle Firebase":
+                    DrawEagleFirebase();
                     break;
             }
         }
@@ -235,6 +238,37 @@ namespace Eagle
             }
 
             InstallPackageHelper.Install($"https://{token}@github.com/dat-dangba/EagleIAP.git");
+        }
+
+        #endregion
+
+        #region EagleFirebase
+
+        private void DrawEagleFirebase()
+        {
+#if HAS_EAGLE_FIREBASE_APP
+            DrawSetting<EagleFirebaseSetting>();
+#else
+            content.Add(new InstallPackageVisualElement("Eagle Firebase Sdk", InstallEagleFirebase));
+#endif
+        }
+
+        private void InstallEagleFirebase()
+        {
+            string token = EagleServices.GetSetting<GeneralSetting>().SDKToken;
+            if (string.IsNullOrEmpty(token))
+            {
+                EagleLog.Log("Nhập Token trước khi cài package");
+                return;
+            }
+
+            var packages = new List<string>()
+            {
+                $"https://{token}@github.com/dat-dangba/EagleFirebaseApp.git",
+                $"https://{token}@github.com/dat-dangba/EagleFirebaseAnalytics.git",
+                $"https://{token}@github.com/dat-dangba/EagleFirebaseCrashlytics.git"
+            };
+            InstallPackageHelper.Install(packages);
         }
 
         #endregion
