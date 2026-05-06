@@ -242,12 +242,12 @@ namespace Eagle
             string token = EagleServices.GetToken();
             if (string.IsNullOrEmpty(token)) return;
 
-            var packages = new List<string>()
+            var packages = new List<string>
             {
-                $"https://{token}@github.com/dat-dangba/EagleFirebase.git",
                 $"https://{token}@github.com/dat-dangba/EagleFirebaseApp.git",
                 $"https://{token}@github.com/dat-dangba/EagleFirebaseAnalytics.git",
-                $"https://{token}@github.com/dat-dangba/EagleFirebaseCrashlytics.git"
+                $"https://{token}@github.com/dat-dangba/EagleFirebaseCrashlytics.git",
+                $"https://{token}@github.com/dat-dangba/EagleFirebase.git",
             };
             InstallPackageHelper.Install(packages);
         }

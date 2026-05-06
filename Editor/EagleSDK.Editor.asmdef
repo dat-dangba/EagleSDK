@@ -9,7 +9,7 @@
         "EagleIAP.Scripts",
         "EagleAds.Scripts",
         "EagleAnalytics.Scripts",
-        "EagleFirebaseApp.Scripts"
+        "EagleFirebase.Scripts"
     ],
     "includePlatforms": [
         "Editor"
