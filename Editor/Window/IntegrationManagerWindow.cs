@@ -221,7 +221,21 @@ namespace Eagle
         {
             string token = EagleServices.GetToken();
             if (string.IsNullOrEmpty(token)) return;
-            InstallPackageHelper.Install($"https://{token}@github.com/dat-dangba/EagleIAP.git");
+            var packages = new List<string>();
+
+            string inAppPurchasing = "com.unity.purchasing";
+            if (!InstallPackageHelper.IsPackageInstalled(inAppPurchasing))
+            {
+                packages.Add(inAppPurchasing);
+            }
+
+            string eagleIAPLink = $"https://{token}@github.com/dat-dangba/EagleIAP.git";
+            if (!InstallPackageHelper.IsPackageInstalled(eagleIAPLink))
+            {
+                packages.Add(eagleIAPLink);
+            }
+
+            InstallPackageHelper.Install(packages);
         }
 
         #endregion
@@ -242,13 +256,32 @@ namespace Eagle
             string token = EagleServices.GetToken();
             if (string.IsNullOrEmpty(token)) return;
 
-            var packages = new List<string>
+            var packages = new List<string>();
+
+            string eagleFirebaseLink = $"https://{token}@github.com/dat-dangba/EagleFirebase.git";
+            if (!InstallPackageHelper.IsPackageInstalled(eagleFirebaseLink))
             {
-                $"https://{token}@github.com/dat-dangba/EagleFirebaseApp.git",
-                $"https://{token}@github.com/dat-dangba/EagleFirebaseAnalytics.git",
-                $"https://{token}@github.com/dat-dangba/EagleFirebaseCrashlytics.git",
-                $"https://{token}@github.com/dat-dangba/EagleFirebase.git",
-            };
+                packages.Add(eagleFirebaseLink);
+            }
+
+            string eagleFirebaseAppLink = $"https://{token}@github.com/dat-dangba/EagleFirebaseApp.git";
+            if (!InstallPackageHelper.IsPackageInstalled(eagleFirebaseAppLink))
+            {
+                packages.Add(eagleFirebaseAppLink);
+            }
+
+            string eagleFirebaseAnalyticsLink = $"https://{token}@github.com/dat-dangba/EagleFirebaseAnalytics.git";
+            if (!InstallPackageHelper.IsPackageInstalled(eagleFirebaseAnalyticsLink))
+            {
+                packages.Add(eagleFirebaseAnalyticsLink);
+            }
+
+            string eagleFirebaseCrashlyticsLink = $"https://{token}@github.com/dat-dangba/EagleFirebaseCrashlytics.git";
+            if (!InstallPackageHelper.IsPackageInstalled(eagleFirebaseCrashlyticsLink))
+            {
+                packages.Add(eagleFirebaseCrashlyticsLink);
+            }
+
             InstallPackageHelper.Install(packages);
         }
 
