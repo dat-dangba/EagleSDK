@@ -10,6 +10,14 @@ namespace Eagle
         private static Dictionary<Type, EagleEditorSettingBase> editorSettings = new();
         private static Dictionary<Type, EagleBuildReflectionConfigBase> buildConfigs = new();
 
+        public static string GetToken()
+        {
+            string token = GetSetting<GeneralSetting>().SDKToken;
+            if (!string.IsNullOrEmpty(token)) return token;
+            EagleLog.Log("Nhập Token trước khi cài package");
+            return "";
+        }
+
         public static T GetSetting<T>() where T : EagleEditorSettingBase
         {
             if (editorSettings.TryGetValue(typeof(T), out var config))

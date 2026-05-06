@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -178,13 +177,8 @@ namespace Eagle
 
         private void InstallEagleAnalyticsSDK()
         {
-            string token = EagleServices.GetSetting<GeneralSetting>().SDKToken;
-            if (string.IsNullOrEmpty(token))
-            {
-                EagleLog.Log("Nhập Token trước khi cài package");
-                return;
-            }
-
+            string token = EagleServices.GetToken();
+            if (string.IsNullOrEmpty(token)) return;
             InstallPackageHelper.Install($"https://{token}@github.com/dat-dangba/EagleAnalytics.git");
         }
 
@@ -205,13 +199,8 @@ namespace Eagle
 
         private void InstallEagleAds()
         {
-            string token = EagleServices.GetSetting<GeneralSetting>().SDKToken;
-            if (string.IsNullOrEmpty(token))
-            {
-                EagleLog.Log("Nhập Token trước khi cài package");
-                return;
-            }
-
+            string token = EagleServices.GetToken();
+            if (string.IsNullOrEmpty(token)) return;
             InstallPackageHelper.Install($"https://{token}@github.com/dat-dangba/EagleAds.git");
         }
 
@@ -230,13 +219,8 @@ namespace Eagle
 
         private void InstallEagleIAP()
         {
-            string token = EagleServices.GetSetting<GeneralSetting>().SDKToken;
-            if (string.IsNullOrEmpty(token))
-            {
-                EagleLog.Log("Nhập Token trước khi cài package");
-                return;
-            }
-
+            string token = EagleServices.GetToken();
+            if (string.IsNullOrEmpty(token)) return;
             InstallPackageHelper.Install($"https://{token}@github.com/dat-dangba/EagleIAP.git");
         }
 
@@ -246,7 +230,7 @@ namespace Eagle
 
         private void DrawEagleFirebase()
         {
-#if HAS_EAGLE_FIREBASE_APP
+#if HAS_EAGLE_FIREBASE
             DrawSetting<EagleFirebaseSetting>();
 #else
             content.Add(new InstallPackageVisualElement("Eagle Firebase Sdk", InstallEagleFirebase));
@@ -255,15 +239,12 @@ namespace Eagle
 
         private void InstallEagleFirebase()
         {
-            string token = EagleServices.GetSetting<GeneralSetting>().SDKToken;
-            if (string.IsNullOrEmpty(token))
-            {
-                EagleLog.Log("Nhập Token trước khi cài package");
-                return;
-            }
+            string token = EagleServices.GetToken();
+            if (string.IsNullOrEmpty(token)) return;
 
             var packages = new List<string>()
             {
+                $"https://{token}@github.com/dat-dangba/EagleFirebase.git",
                 $"https://{token}@github.com/dat-dangba/EagleFirebaseApp.git",
                 $"https://{token}@github.com/dat-dangba/EagleFirebaseAnalytics.git",
                 $"https://{token}@github.com/dat-dangba/EagleFirebaseCrashlytics.git"
