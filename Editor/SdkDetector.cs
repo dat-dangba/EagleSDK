@@ -22,6 +22,8 @@ namespace Eagle
             { "HAS_EAGLE_FIREBASE_APP", "com.eagle.firebase.app" },
             { "HAS_EAGLE_FIREBASE_ANALYTICS", "com.eagle.firebase.analytics" },
             { "HAS_EAGLE_FIREBASE_CRASHLYTICS", "com.eagle.firebase.crashlytics" },
+            { "HAS_EAGLE_FIREBASE_REMOTECONFIG", "com.eagle.firebase.remoteconfig" },
+            { "HAS_EAGLE_FIREBASE_MESSAGING", "com.eagle.firebase.messaging" },
         };
 
         static SdkDetector()

@@ -17,7 +17,10 @@ namespace Eagle
         private const float height = 650;
 
         private string[] tabs =
-            { "General", "Adjust", "MAX", "Eagle Analytics", "Eagle Ads", "Eagle IAP", "Eagle Firebase" };
+        {
+            "General", "Adjust", "MAX", "Eagle Analytics", "Eagle Ads", "Eagle IAP", "Eagle Firebase",
+            "Eagle Firebase Remote Config"
+        };
 
         [MenuItem("Eagle/Eagle Integration Manager %#e")]
         public static void ShowWindow()
@@ -93,6 +96,9 @@ namespace Eagle
                     break;
                 case "Eagle Firebase":
                     DrawEagleFirebase();
+                    break;
+                case "Eagle Firebase Remote Config":
+                    DrawEagleFirebaseRemoteConfig();
                     break;
             }
         }
@@ -283,6 +289,27 @@ namespace Eagle
             }
 
             InstallPackageHelper.Install(packages);
+        }
+
+        #endregion
+
+        #region EagleFirebase RemoteConfig
+
+        private void DrawEagleFirebaseRemoteConfig()
+        {
+#if HAS_EAGLE_FIREBASE_REMOTECONFIG
+            DrawSetting<EagleFirebaseRemoteConfigSetting>();
+#else
+            content.Add(new InstallPackageVisualElement("Eagle Firebase Remote Config Sdk",
+                InstallEagleFirebaseRemoteConfig));
+#endif
+        }
+
+        private void InstallEagleFirebaseRemoteConfig()
+        {
+            string token = EagleServices.GetToken();
+            if (string.IsNullOrEmpty(token)) return;
+            InstallPackageHelper.Install($"https://{token}@github.com/dat-dangba/EagleFirebaseRemoteConfig.git");
         }
 
         #endregion
