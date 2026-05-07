@@ -9,6 +9,7 @@ namespace Eagle
         public static event Action OnAppStart;
         public static event Action OnAppEnable;
         public static event Action OnAppDisable;
+        public static event Action OnAppDestroy;
         public static event Action<bool> OnAppPause;
         public static event Action<bool> OnAppFocus;
 
@@ -40,6 +41,11 @@ namespace Eagle
         private void OnDisable()
         {
             OnAppDisable?.Invoke();
+        }
+
+        private void OnDestroy()
+        {
+            OnAppDestroy?.Invoke();
         }
     }
 }
