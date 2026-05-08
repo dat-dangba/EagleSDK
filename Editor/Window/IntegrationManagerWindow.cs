@@ -18,7 +18,7 @@ namespace Eagle
 
         private string[] tabs =
         {
-            "General", "Adjust", "MAX", "Eagle Analytics", "Eagle Ads", "Eagle IAP", "Eagle Firebase",
+            "General", "Base Game", "Adjust", "MAX", "Eagle Analytics", "Eagle Ads", "Eagle IAP", "Eagle Firebase",
             "Eagle Firebase Remote Config"
         };
 
@@ -78,6 +78,9 @@ namespace Eagle
             {
                 case "General":
                     DrawSetting<GeneralSetting>();
+                    break;
+                case "Base Game":
+                    DrawSetting<BaseGameSetting>();
                     break;
                 case "Adjust":
                     DrawSetting<AdjustSetting>();

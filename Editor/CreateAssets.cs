@@ -26,6 +26,7 @@ namespace Eagle
 #endif
             CreateAsset<GeneralSetting>(Constant.SettingsFolder);
             CreateAsset<AdjustSetting>(Constant.SettingsFolder);
+            CreateAsset<BaseGameSetting>(Constant.SettingsFolder);
         }
 
         public static T CreateAsset<T>(string folderPath) where T : ScriptableObject
