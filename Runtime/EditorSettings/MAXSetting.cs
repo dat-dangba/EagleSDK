@@ -8,5 +8,8 @@ namespace Eagle
         public bool ConsentFlowEnabled = true;
         public string ConsentFlowPrivacyPolicyUrl = "";
         public string GoogleAdmobAppId = "ca-app-pub-3940256099942544~3347511713";
+#if HAS_MAX_SDK
+        public MaxSdkBase.ConsentFlowUserGeography DebugUserGeography = MaxSdkBase.ConsentFlowUserGeography.Unknown;
+#endif
     }
 }

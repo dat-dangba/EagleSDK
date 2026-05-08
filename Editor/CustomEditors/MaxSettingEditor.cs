@@ -51,6 +51,7 @@ namespace Eagle
         private void SetupMaxSdk()
         {
 #if HAS_MAX_SDK
+            serializedObject.Update();
             AppLovinSettings settings = AppLovinSettings.Instance;
             settings.SdkKey = serializedObject.FindProperty("MaxSdkKey").stringValue;
             settings.AdMobAndroidAppId = serializedObject.FindProperty("GoogleAdmobAppId").stringValue;
@@ -61,6 +62,14 @@ namespace Eagle
 
             AppLovinInternalSettings.Instance.ConsentFlowPrivacyPolicyUrl =
                 serializedObject.FindProperty("ConsentFlowPrivacyPolicyUrl").stringValue;
+
+            MaxSdkBase.ConsentFlowUserGeography value =
+                (MaxSdkBase.ConsentFlowUserGeography)serializedObject.FindProperty("DebugUserGeography").enumValueIndex;
+            AppLovinInternalSettings.Instance.DebugUserGeography = value;
+
+            AppLovinInternalSettings.Instance.Save();
+            EditorUtility.SetDirty(AppLovinInternalSettings.Instance);
+            AssetDatabase.SaveAssets();
 #endif
         }
     }

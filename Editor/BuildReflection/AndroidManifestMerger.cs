@@ -17,6 +17,8 @@ namespace Eagle
 
         public void OnPostGenerateGradleAndroidProject(string pathToBuiltProject)
         {
+            SetAllowBackupAndIsGame(pathToBuiltProject);
+
             var launcherPath = GetLauncherPath(pathToBuiltProject);
 
             var configDict = GetAllConfig();
@@ -24,6 +26,35 @@ namespace Eagle
             bool success = MergeBuildGradle(launcherPath, configDict);
             if (!success) return;
             MergeManifest(launcherPath, configDict);
+        }
+
+        private void SetAllowBackupAndIsGame(string pathToBuiltProject)
+        {
+            string manifestPath;
+            if (pathToBuiltProject.Contains("unityLibrary"))
+            {
+                var pathProject = pathToBuiltProject.Replace("unityLibrary", "");
+                manifestPath = Path.Combine(pathProject, "launcher/src/main/AndroidManifest.xml");
+            }
+            else if (pathToBuiltProject.Contains("launcher"))
+            {
+                manifestPath = Path.Combine(pathToBuiltProject, "src/main/AndroidManifest.xml");
+            }
+            else
+            {
+                manifestPath = Path.Combine(pathToBuiltProject, "launcher/src/main/AndroidManifest.xml");
+            }
+
+            var xml = new XmlDocument();
+            xml.Load(manifestPath);
+            var manifest = xml.SelectSingleNode("/manifest");
+            if (manifest?.SelectSingleNode("application") is XmlElement application)
+            {
+                application.SetAttribute("allowBackup", ANDROID_NS, "false");
+                application.SetAttribute("isGame", ANDROID_NS, "true");
+            }
+
+            xml.Save(manifestPath);
         }
 
         private string GetLauncherPath(string pathToBuiltProject)
