@@ -352,8 +352,9 @@ namespace Eagle
 
         private VisualElement GetContentContainer()
         {
-            VisualElement contentContainer = new VisualElement
+            ScrollView contentContainer = new ScrollView(ScrollViewMode.Vertical)
             {
+                horizontalScrollerVisibility = ScrollerVisibility.Hidden,
                 style =
                 {
                     paddingTop = 10,
@@ -370,15 +371,15 @@ namespace Eagle
 
         private VisualElement GetMenuBar()
         {
-            VisualElement menuBar = new VisualElement
+            ScrollView menuBar = new ScrollView(ScrollViewMode.Vertical)
             {
+                horizontalScrollerVisibility = ScrollerVisibility.Hidden,
                 style =
                 {
                     width = 250,
                     backgroundColor = menuColor
                 }
             };
-
 
             for (int i = 0; i < tabs.Length; i++)
             {
