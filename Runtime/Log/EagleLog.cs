@@ -20,6 +20,7 @@ namespace Eagle
             }
         }
 
+        [HideInCallstack]
         public static void Log(string message, LogLevel level = LogLevel.Minimal)
         {
             if (ShouldLog(level))
@@ -28,6 +29,7 @@ namespace Eagle
             }
         }
 
+        [HideInCallstack]
         public static void LogWarning(string message, LogLevel level = LogLevel.Minimal)
         {
             if (ShouldLog(level))
@@ -36,6 +38,7 @@ namespace Eagle
             }
         }
 
+        [HideInCallstack]
         public static void LogError(string message, LogLevel level = LogLevel.Minimal)
         {
             if (ShouldLog(level))
