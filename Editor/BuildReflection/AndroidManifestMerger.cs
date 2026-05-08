@@ -17,18 +17,32 @@ namespace Eagle
 
         public void OnPostGenerateGradleAndroidProject(string pathToBuiltProject)
         {
-            SetAllowBackupAndIsGame(pathToBuiltProject);
-
+            var launcherManifestPath = GetLauncherManifestPath(pathToBuiltProject);
             var launcherPath = GetLauncherPath(pathToBuiltProject);
 
-            var configDict = GetAllConfig();
+            SetAllowBackupAndIsGame(launcherManifestPath);
 
+            var configDict = GetAllConfig();
             bool success = MergeBuildGradle(launcherPath, configDict);
             if (!success) return;
-            MergeManifest(launcherPath, configDict);
+            MergeManifest(launcherManifestPath, configDict);
         }
 
-        private void SetAllowBackupAndIsGame(string pathToBuiltProject)
+        private void SetAllowBackupAndIsGame(string manifestPath)
+        {
+            var xml = new XmlDocument();
+            xml.Load(manifestPath);
+            var manifest = xml.SelectSingleNode("/manifest");
+            if (manifest?.SelectSingleNode("application") is XmlElement application)
+            {
+                application.SetAttribute("allowBackup", ANDROID_NS, "false");
+                application.SetAttribute("isGame", ANDROID_NS, "true");
+            }
+
+            xml.Save(manifestPath);
+        }
+
+        private string GetLauncherManifestPath(string pathToBuiltProject)
         {
             string manifestPath;
             if (pathToBuiltProject.Contains("unityLibrary"))
@@ -45,16 +59,7 @@ namespace Eagle
                 manifestPath = Path.Combine(pathToBuiltProject, "launcher/src/main/AndroidManifest.xml");
             }
 
-            var xml = new XmlDocument();
-            xml.Load(manifestPath);
-            var manifest = xml.SelectSingleNode("/manifest");
-            if (manifest?.SelectSingleNode("application") is XmlElement application)
-            {
-                application.SetAttribute("allowBackup", ANDROID_NS, "false");
-                application.SetAttribute("isGame", ANDROID_NS, "true");
-            }
-
-            xml.Save(manifestPath);
+            return manifestPath;
         }
 
         private string GetLauncherPath(string pathToBuiltProject)
@@ -99,10 +104,8 @@ namespace Eagle
             return configDict;
         }
 
-        private void MergeManifest(string launcherPath, Dictionary<string, string> configDict)
+        private void MergeManifest(string manifestPath, Dictionary<string, string> configDict)
         {
-            string manifestPath = Path.Combine(launcherPath, "src/main/AndroidManifest.xml");
-
             if (!File.Exists(manifestPath))
             {
                 Debug.LogError($"Không tìm thấy file manifest: {manifestPath}");
