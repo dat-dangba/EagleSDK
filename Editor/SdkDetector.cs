@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEditor.Build;
 using UnityEditor.Compilation;
+using UnityEngine;
 
 namespace Eagle
 {
@@ -34,15 +35,22 @@ namespace Eagle
 
         private static void UpdateDefineSymbolsAndReload()
         {
+            BuildTargetGroup currentGroup = EditorUserBuildSettings.selectedBuildTargetGroup;
             foreach (var item in SdkDefinitions)
             {
                 bool isInstalled = IsPackageInstalled(item.Value);
-                if (DefineSymbolIfNeeded(BuildTargetGroup.iOS, item.Key, isInstalled) |
-                    DefineSymbolIfNeeded(BuildTargetGroup.Android, item.Key, isInstalled))
+                if (DefineSymbolIfNeeded(currentGroup, item.Key, isInstalled))
                 {
                     AssetDatabase.SaveAssets();
                     AssetDatabase.Refresh();
                 }
+
+                // if (DefineSymbolIfNeeded(BuildTargetGroup.iOS, item.Key, isInstalled) |
+                //     DefineSymbolIfNeeded(BuildTargetGroup.Android, item.Key, isInstalled))
+                // {
+                //     AssetDatabase.SaveAssets();
+                //     AssetDatabase.Refresh();
+                // }
             }
         }
 
