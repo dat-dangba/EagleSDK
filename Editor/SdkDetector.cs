@@ -38,25 +38,11 @@ namespace Eagle
             BuildTargetGroup currentGroup = EditorUserBuildSettings.selectedBuildTargetGroup;
             foreach (var item in SdkDefinitions)
             {
-                bool isInstalled = IsPackageInstalled(item.Value);
-                if (DefineSymbolIfNeeded(currentGroup, item.Key, isInstalled))
-                {
-                    AssetDatabase.SaveAssets();
-                    AssetDatabase.Refresh();
-                }
-
-                // if (DefineSymbolIfNeeded(BuildTargetGroup.iOS, item.Key, isInstalled) |
-                //     DefineSymbolIfNeeded(BuildTargetGroup.Android, item.Key, isInstalled))
-                // {
-                //     AssetDatabase.SaveAssets();
-                //     AssetDatabase.Refresh();
-                // }
+                bool isInstalled = InstallPackageHelper.IsPackageInstalled(item.Value);
+                if (!DefineSymbolIfNeeded(currentGroup, item.Key, isInstalled)) continue;
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
             }
-        }
-
-        private static bool IsPackageInstalled(string packageId)
-        {
-            return Directory.Exists($"Packages/{packageId}");
         }
 
         private static bool DefineSymbolIfNeeded(BuildTargetGroup targetGroup, string defineSymbol, bool isInstalled)
