@@ -156,6 +156,12 @@ namespace Eagle
 
         private bool MergeBuildGradle(string launcherPath, Dictionary<string, string> configDict)
         {
+            if (configDict.Count == 0)
+            {
+                Debug.LogError($"Không có config cần thêm");
+                return false;
+            }
+
             string buildGradlePath = Path.Combine(launcherPath, "build.gradle");
 
             if (!File.Exists(buildGradlePath))
