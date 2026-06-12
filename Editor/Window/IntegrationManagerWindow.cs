@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -37,6 +38,7 @@ namespace Eagle
 
         private void CreateGUI()
         {
+            Debug.Log($"datdb - CreateGUI");
             VisualElement root = rootVisualElement;
             if (!EDM4UManager.IsEDM4UInstalled())
             {
@@ -63,7 +65,7 @@ namespace Eagle
             content = GetContentContainer();
             bottomContainer.Add(content);
 
-            ShowConfig(currentLabel.text);
+            ShowConfig(SessionState.GetString("tab", "General"));
         }
 
         private void ShowConfig(string labelText)
@@ -388,7 +390,7 @@ namespace Eagle
             {
                 string tabName = tabs[i];
                 var label = GetLabel(tabName);
-                if (i == 0)
+                if (SessionState.GetString("tab", "General") == tabName)
                 {
                     currentLabel = label;
                 }
@@ -402,6 +404,7 @@ namespace Eagle
 
                     label.style.backgroundColor = contentColor;
                     currentLabel = label;
+                    SessionState.SetString("tab", currentLabel.text);
 
                     ShowConfig(currentLabel.text);
                 });
