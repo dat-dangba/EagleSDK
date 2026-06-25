@@ -51,7 +51,7 @@ namespace Eagle
                         root.SetReal(key, f);
                         break;
                     case string s:
-                        root.SetString(key, s);
+                        root.SetString(key == "admob_app_id" ? "GADApplicationIdentifier" : key, s);
                         break;
                     default:
                         root.SetString(key, rawValue.ToString());

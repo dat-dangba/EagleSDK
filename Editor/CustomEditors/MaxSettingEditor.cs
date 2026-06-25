@@ -71,6 +71,13 @@ namespace Eagle
             EditorUtility.SetDirty(AppLovinInternalSettings.Instance);
             AssetDatabase.SaveAssets();
 #endif
+
+#if HAS_EAGLE_ADS
+            EagleAdsBuildConfig eagleAdsBuildConfig = EagleServices.GetBuildConfig<EagleAdsBuildConfig>();
+            eagleAdsBuildConfig.admob_app_id = serializedObject.FindProperty("GoogleAdmobAppId").stringValue;
+            EditorUtility.SetDirty(eagleAdsBuildConfig);
+            AssetDatabase.SaveAssets();
+#endif
         }
     }
 }

@@ -146,7 +146,8 @@ namespace Eagle
                 }
 
                 var meta = xml.CreateElement("meta-data");
-                meta.SetAttribute("name", ANDROID_NS, key);
+                meta.SetAttribute("name", ANDROID_NS,
+                    key == "admob_app_id" ? "com.google.android.gms.ads.APPLICATION_ID" : key);
                 meta.SetAttribute("value", ANDROID_NS, $"${{{key}}}");
                 application.AppendChild(meta);
             }
@@ -241,4 +242,5 @@ namespace Eagle
         }
     }
 }
+
 #endif
