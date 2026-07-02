@@ -15,11 +15,26 @@ namespace Eagle
         {
             VisualElement root = new VisualElement();
 
-            InspectorElement.FillDefaultInspector(root, serializedObject, this);
-
             if (InstallPackageHelper.IsPackageInstalled(PackageId))
             {
                 root.Add(new PackageInstalledVisualElement("Adjust"));
+                InspectorElement.FillDefaultInspector(root, serializedObject, this);
+#if HAS_EAGLE_ANALYTICS
+                var buildConfig = EagleServices.GetBuildConfig<AdjustBuildConfig>();
+                if (buildConfig != null)
+                {
+                    var serializedConfig = new SerializedObject(buildConfig);
+                    var configInspector = new InspectorElement(serializedConfig)
+                    {
+                        style =
+                        {
+                            paddingLeft = 0,
+                            marginTop = 10
+                        }
+                    };
+                    root.Add(configInspector);
+                }
+#endif
             }
             else
             {
