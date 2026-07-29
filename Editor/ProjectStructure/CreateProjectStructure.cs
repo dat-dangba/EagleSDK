@@ -34,7 +34,6 @@ namespace Eagle
             "_Project/Scripts/Interface",
             "_Project/Scripts/Utils",
             "_Project/Scripts/GameAction",
-            "_Project/Settings",
             "_Project/Shaders",
 
             // _ThirdParty
