@@ -38,7 +38,6 @@ namespace Eagle
 
         private void CreateGUI()
         {
-            Debug.Log($"datdb - CreateGUI");
             VisualElement root = rootVisualElement;
             if (!EDM4UManager.IsEDM4UInstalled())
             {
@@ -64,8 +63,8 @@ namespace Eagle
 
             content = GetContentContainer();
             bottomContainer.Add(content);
-
-            ShowConfig(SessionState.GetString("tab", "General"));
+            string labelText = SessionState.GetString("tab", "General");
+            ShowConfig(labelText);
         }
 
         private void ShowConfig(string labelText)
@@ -150,25 +149,9 @@ namespace Eagle
 
         private void InstallMAXSdk()
         {
-            AddRegistry();
+            RegistryHelper.AddRegistryMAX();
             InstallPackageHelper.Install("com.applovin.mediation.ads",
                 () => { CreateAssets.CreateAsset<MAXSetting>(Constant.SettingsFolder); });
-        }
-
-        private void AddRegistry()
-        {
-            var maxRegistry = new ScopedRegistry
-            {
-                name = "AppLovin MAX Unity",
-                url = "https://unity.packages.applovin.com",
-                scopes = new List<string>
-                {
-                    "com.applovin.mediation.ads",
-                    "com.applovin.mediation.adapters",
-                    "com.applovin.mediation.dsp"
-                }
-            };
-            RegistryHelper.AddRegistry(maxRegistry);
         }
 
         #endregion
@@ -425,7 +408,7 @@ namespace Eagle
                     paddingLeft = 20,
                     unityTextAlign = TextAnchor.MiddleLeft,
                     color = Color.white,
-                    backgroundColor = tabName == "General" ? contentColor : menuColor
+                    backgroundColor = tabName == SessionState.GetString("tab", "General") ? contentColor : menuColor
                 }
             };
             return label;

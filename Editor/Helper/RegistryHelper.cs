@@ -8,6 +8,33 @@ namespace Eagle
 {
     public static class RegistryHelper
     {
+        public static void AddRegistryMAX()
+        {
+            var maxRegistry = new ScopedRegistry
+            {
+                name = "AppLovin MAX Unity",
+                url = "https://unity.packages.applovin.com",
+                scopes = new List<string>
+                {
+                    "com.applovin.mediation.ads",
+                    "com.applovin.mediation.adapters",
+                    "com.applovin.mediation.dsp"
+                }
+            };
+            AddRegistry(maxRegistry);
+        }
+        
+        public static void AddRegistryEDM4U()
+        {
+            var openUPM = new ScopedRegistry
+            {
+                name = "package.openupm.com",
+                url = "https://package.openupm.com",
+                scopes = new List<string> { EDM4UManager.PackageId }
+            };
+            AddRegistry(openUPM);
+        }
+
         public static void AddRegistry(ScopedRegistry scopedRegistry)
         {
             string manifestPath = Path.Combine(Application.dataPath, "..", "Packages", "manifest.json");

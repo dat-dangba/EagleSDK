@@ -44,6 +44,11 @@ namespace Eagle
             if (packagesToInstall.Count == 0)
             {
                 EagleLog.Log("Tất cả package đã được cài đặt xong!", LogLevel.Verbose);
+                EditorUtility.DisplayDialog(
+                    "Install Package",
+                    $"Tất cả package đã được cài đặt xong!",
+                    "OK"
+                );
                 OnInstallCompleted?.Invoke();
                 OnInstallCompleted = null;
                 return;

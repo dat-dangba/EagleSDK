@@ -9,7 +9,7 @@ namespace Eagle
     public class AdjustSettingEditor : EagleSettingEditor
     {
         private const string PackageId = "com.adjust.sdk";
-        private const string LinkInstall = "https://github.com/adjust/unity_sdk.git?path=Assets/Adjust";
+        public const string LinkInstall = "https://github.com/adjust/unity_sdk.git?path=Assets/Adjust";
 
         public override VisualElement CreateInspectorGUI()
         {
