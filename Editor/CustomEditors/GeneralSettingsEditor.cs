@@ -50,18 +50,18 @@ namespace Eagle
 
             var package = new List<string>
             {
+                "com.unity.purchasing",
                 "com.applovin.mediation.ads",
-                $"https://{token}@github.com/dat-dangba/EagleBaseGame.git",
                 AdjustSettingEditor.LinkInstall,
                 $"https://{token}@github.com/dat-dangba/EagleAnalytics.git",
                 $"https://{token}@github.com/dat-dangba/EagleAds.git",
-                "com.unity.purchasing",
                 $"https://{token}@github.com/dat-dangba/EagleIAP.git",
-                $"https://{token}@github.com/dat-dangba/EagleFirebase.git",
                 $"https://{token}@github.com/dat-dangba/EagleFirebaseApp.git",
                 $"https://{token}@github.com/dat-dangba/EagleFirebaseAnalytics.git",
                 $"https://{token}@github.com/dat-dangba/EagleFirebaseCrashlytics.git",
-                $"https://{token}@github.com/dat-dangba/EagleFirebaseRemoteConfig.git"
+                $"https://{token}@github.com/dat-dangba/EagleFirebaseRemoteConfig.git",
+                $"https://{token}@github.com/dat-dangba/EagleFirebase.git",
+                $"https://{token}@github.com/dat-dangba/EagleBaseGame.git",
             };
             InstallPackageHelper.Install(package,
                 () => { CreateAssets.CreateAsset<MAXSetting>(Constant.SettingsFolder); });
