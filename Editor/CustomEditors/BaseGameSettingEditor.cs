@@ -17,11 +17,30 @@ namespace Eagle
             root.Add(new InstallPackageVisualElement("Base Game", InstallBaseGame));
 #endif
 
+#if HAS_BASE_GAME_V2
+            root.Add(new PackageInstalledVisualElement("Base Game v2"));
+#else
+            root.Add(new InstallPackageVisualElement("Base Game v2", InstallBaseGame)
+            {
+                style =
+                {
+                    marginTop = 20
+                }
+            });
+#endif
+
             InspectorElement.FillDefaultInspector(root, serializedObject, this);
 
             HideScript(root);
 
             return root;
+        }
+
+        private void InstallBaseGameV2()
+        {
+            string token = EagleServices.GetToken();
+            if (string.IsNullOrEmpty(token)) return;
+            InstallPackageHelper.Install($"https://{token}@github.com/dat-dangba/EagleBaseGameV2.git");
         }
 
         private void InstallBaseGame()
