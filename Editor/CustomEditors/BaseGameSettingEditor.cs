@@ -18,7 +18,13 @@ namespace Eagle
 #endif
 
 #if HAS_BASE_GAME_V2
-            root.Add(new PackageInstalledVisualElement("Base Game v2"));
+            root.Add(new PackageInstalledVisualElement("Base Game v2")
+            {
+                style =
+                {
+                    marginTop = 20
+                }
+            });
 #else
             root.Add(new InstallPackageVisualElement("Base Game v2", InstallBaseGameV2)
             {
