@@ -23,7 +23,7 @@ namespace Eagle
             "Eagle Firebase Remote Config"
         };
 
-        [MenuItem("Eagle/Eagle Integration Manager %#e")]
+        [MenuItem("Eagle/Eagle Integration Manager %#e", false, 0)]
         public static void ShowWindow()
         {
             var main = EditorGUIUtility.GetMainWindowPosition();
