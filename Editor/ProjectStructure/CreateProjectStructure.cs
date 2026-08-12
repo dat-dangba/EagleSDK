@@ -39,7 +39,7 @@ namespace Eagle
 
             foreach (var filePath in Directory.GetFiles(sourceDir, "*.*", SearchOption.AllDirectories))
             {
-                if (filePath.EndsWith(".meta"))
+                if (filePath.EndsWith(".meta") || filePath.EndsWith(".gitkeep"))
                     continue; // để Unity tự sinh meta mới, tránh trùng GUID giữa các project
 
                 var destFile = filePath.Replace(sourceDir, destDir);
