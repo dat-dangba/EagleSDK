@@ -14,17 +14,6 @@ namespace Eagle
 
             InspectorElement.FillDefaultInspector(root, serializedObject, this);
 
-            Button createProjectStructure = new Button(CreateProjectStructure.CreateFolders)
-            {
-                text = "Create Project Structure",
-                style =
-                {
-                    marginTop = 20
-                }
-            };
-
-            root.Add(createProjectStructure);
-
             // Button installAllPackage = new Button(InstallAllPackage)
             // {
             //     text = "Install All Package",

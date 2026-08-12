@@ -25,6 +25,17 @@ namespace Eagle
                     marginTop = 20
                 }
             });
+
+            Button createProjectStructure = new Button(CreateProjectStructure.CopyProjectStructure)
+            {
+                text = "Create Project Structure",
+                style =
+                {
+                    marginTop = 20
+                }
+            };
+
+            root.Add(createProjectStructure);
 #else
             root.Add(new InstallPackageVisualElement("Base Game v2", InstallBaseGameV2)
             {
@@ -34,7 +45,6 @@ namespace Eagle
                 }
             });
 #endif
-
             InspectorElement.FillDefaultInspector(root, serializedObject, this);
 
             HideScript(root);

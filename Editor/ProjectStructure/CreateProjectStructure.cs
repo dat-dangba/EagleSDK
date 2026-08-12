@@ -1,107 +1,51 @@
 using System.IO;
 using UnityEditor;
 using UnityEngine;
+using PackageInfo = UnityEditor.PackageManager.PackageInfo;
 
 namespace Eagle
 {
-    /// <summary>
-    /// Editor tool để tạo project folder structure chuẩn cho _Project và _ThirdParty.
-    /// Đặt file này vào Assets/Editor/ (không phải trong runtime folder).
-    /// Sử dụng: Menu "Tools/Project Setup/Create Folder Structure"
-    /// </summary>
     public static class CreateProjectStructure
     {
-        // Danh sách các path folder cần tạo, tương đối so với Assets/
-        private static readonly string[] FolderPaths = new[]
+        private const string PACKAGE_NAME = "com.eagle.basegame.v2";
+        private const string SOURCE_FOLDER = "ProjectStructure~";
+
+        [MenuItem("Eagle/Setup/Copy Project Structure")]
+        public static void CopyProjectStructure()
         {
-            // _Project
-            "_Project/Animations",
-            "_Project/Audio",
-            "_Project/Fonts",
-            "_Project/Images",
-            "_Project/Materials",
-            "_Project/Model3D",
-            "_Project/Prefabs/GamePlay",
-            "_Project/Prefabs/UI",
-            "_Project/Prefabs/VFX",
-            "_Project/Scenes",
-            "_Project/ScriptableObjects",
-            "_Project/ScriptableObjects/_Scripts",
-            "_Project/Scripts/Events",
-            "_Project/Scripts/GamePlay/",
-            "_Project/Scripts/UI",
-            "_Project/Scripts/Enums",
-            "_Project/Scripts/Interface",
-            "_Project/Scripts/Utils",
-            "_Project/Scripts/GameAction",
-            "_Project/Shaders",
-
-            // _ThirdParty
-            "_ThirdParty/",
-        };
-
-        // [MenuItem("Tools/Project Setup/Create Folder Structure")]
-        public static void CreateFolders()
-        {
-            int createdCount = 0;
-            int skippedCount = 0;
-
-            foreach (string relativePath in FolderPaths)
+            var packageInfo = PackageInfo.FindForPackageName(PACKAGE_NAME);
+            if (packageInfo == null)
             {
-                string fullPath = Path.Combine(Application.dataPath, relativePath);
-
-                if (Directory.Exists(fullPath))
-                {
-                    skippedCount++;
-                    continue;
-                }
-
-                Directory.CreateDirectory(fullPath);
-                createdCount++;
-
-                // // Tạo .gitkeep để git track được folder rỗng
-                // string gitkeepPath = Path.Combine(fullPath, ".gitkeep");
-                // if (!File.Exists(gitkeepPath))
-                // {
-                //     File.WriteAllText(gitkeepPath, string.Empty);
-                // }
+                Debug.LogError($"[ProjectStructure] Không tìm thấy package {PACKAGE_NAME}");
+                return;
             }
 
-            AssetDatabase.Refresh();
+            var sourcePath = Path.Combine(packageInfo.resolvedPath, SOURCE_FOLDER);
+            if (!Directory.Exists(sourcePath))
+            {
+                Debug.LogError($"[ProjectStructure] Không tìm thấy folder: {sourcePath}");
+                return;
+            }
 
-            EditorUtility.DisplayDialog(
-                "Create Folder Structure",
-                $"Đã tạo {createdCount} folder mới.\n{skippedCount} folder đã tồn tại từ trước.",
-                "OK"
-            );
+            CopyDirectory(sourcePath, Application.dataPath);
+            AssetDatabase.Refresh();
+            Debug.Log("[ProjectStructure] Copy Project Structure hoàn tất.");
         }
 
-        // // Tuỳ chọn: xoá toàn bộ _Project và _ThirdParty (dùng thận trọng, chỉ cho project mới/test)
-        // [MenuItem("Tools/Project Setup/Delete Folder Structure (Danger)")]
-        // public static void DeleteFolders()
-        // {
-        //     bool confirm = EditorUtility.DisplayDialog(
-        //         "Xoá Folder Structure",
-        //         "Hành động này sẽ xoá _Project và _ThirdParty (nếu tồn tại) cùng toàn bộ nội dung bên trong. Bạn chắc chắn chứ?",
-        //         "Xoá", "Huỷ"
-        //     );
-        //
-        //     if (!confirm) return;
-        //
-        //     string[] rootFolders = { "_Project", "_ThirdParty" };
-        //     foreach (string root in rootFolders)
-        //     {
-        //         string fullPath = Path.Combine(Application.dataPath, root);
-        //         if (Directory.Exists(fullPath))
-        //         {
-        //             Directory.Delete(fullPath, true);
-        //             string metaPath = fullPath + ".meta";
-        //             if (File.Exists(metaPath)) File.Delete(metaPath);
-        //         }
-        //     }
-        //
-        //     AssetDatabase.Refresh();
-        //     Debug.Log("[CreateProjectStructure] Đã xoá _Project và _ThirdParty.");
-        // }
+        private static void CopyDirectory(string sourceDir, string destDir)
+        {
+            foreach (var dirPath in Directory.GetDirectories(sourceDir, "*", SearchOption.AllDirectories))
+                Directory.CreateDirectory(dirPath.Replace(sourceDir, destDir));
+
+            foreach (var filePath in Directory.GetFiles(sourceDir, "*.*", SearchOption.AllDirectories))
+            {
+                if (filePath.EndsWith(".meta"))
+                    continue; // để Unity tự sinh meta mới, tránh trùng GUID giữa các project
+
+                var destFile = filePath.Replace(sourceDir, destDir);
+                if (!File.Exists(destFile))
+                    File.Copy(filePath, destFile);
+            }
+        }
     }
 }
