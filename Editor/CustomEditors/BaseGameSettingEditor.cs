@@ -31,7 +31,7 @@ namespace Eagle
                 text = "Create Project Structure",
                 style =
                 {
-                    marginTop = 20
+                    marginTop = 50
                 }
             };
 
