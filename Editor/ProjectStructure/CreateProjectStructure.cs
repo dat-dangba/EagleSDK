@@ -10,7 +10,6 @@ namespace Eagle
         private const string PACKAGE_NAME = "com.eagle.basegame.v2";
         private const string SOURCE_FOLDER = "ProjectStructure~";
 
-        [MenuItem("Eagle/Setup/Copy Project Structure")]
         public static void CopyProjectStructure()
         {
             var packageInfo = PackageInfo.FindForPackageName(PACKAGE_NAME);
