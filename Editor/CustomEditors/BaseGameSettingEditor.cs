@@ -12,6 +12,21 @@ namespace Eagle
         {
             VisualElement root = new VisualElement();
 
+#if HAS_AUTO_REFERENCE
+            InstallBaseGame(root);
+#else
+            root.Add(new InstallPackageVisualElement("Auto Reference", InstallAutoReference));
+#endif
+
+            InspectorElement.FillDefaultInspector(root, serializedObject, this);
+
+            HideScript(root);
+
+            return root;
+        }
+
+        private void InstallBaseGame(VisualElement root)
+        {
 #if HAS_BASE_GAME
             root.Add(new PackageInstalledVisualElement("Base Game"));
 #else
@@ -46,11 +61,14 @@ namespace Eagle
                 }
             });
 #endif
-            InspectorElement.FillDefaultInspector(root, serializedObject, this);
+        }
 
-            HideScript(root);
+        private void InstallAutoReference()
+        {
+            string token = EagleServices.GetToken();
+            if (string.IsNullOrEmpty(token)) return;
 
-            return root;
+            InstallPackageHelper.Install($"https://{token}@github.com/dat-dangba/EagleAutoReference.git");
         }
 
         private void InstallBaseGameV2()
@@ -58,13 +76,7 @@ namespace Eagle
             string token = EagleServices.GetToken();
             if (string.IsNullOrEmpty(token)) return;
 
-            List<string> packages = new List<string>();
-#if !HAS_AUTO_REFERENCE
-            packages.Add($"https://{token}@github.com/dat-dangba/EagleAutoReference.git");
-#endif
-            packages.Add($"https://{token}@github.com/dat-dangba/EagleBaseGameV2.git");
-
-            InstallPackageHelper.Install(packages);
+            InstallPackageHelper.Install($"https://{token}@github.com/dat-dangba/EagleBaseGameV2.git");
         }
 
         private void InstallBaseGame()
@@ -72,13 +84,7 @@ namespace Eagle
             string token = EagleServices.GetToken();
             if (string.IsNullOrEmpty(token)) return;
 
-            List<string> packages = new List<string>();
-#if !HAS_AUTO_REFERENCE
-            packages.Add($"https://{token}@github.com/dat-dangba/EagleAutoReference.git");
-#endif
-            packages.Add($"https://{token}@github.com/dat-dangba/EagleBaseGame.git");
-
-            InstallPackageHelper.Install(packages);
+            InstallPackageHelper.Install($"https://{token}@github.com/dat-dangba/EagleBaseGame.git");
         }
     }
 }
