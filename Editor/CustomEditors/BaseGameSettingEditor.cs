@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
@@ -56,14 +57,28 @@ namespace Eagle
         {
             string token = EagleServices.GetToken();
             if (string.IsNullOrEmpty(token)) return;
-            InstallPackageHelper.Install($"https://{token}@github.com/dat-dangba/EagleBaseGameV2.git");
+
+            List<string> packages = new List<string>();
+#if !HAS_AUTO_REFERENCE
+            packages.Add($"https://{token}@github.com/dat-dangba/EagleAutoReference.git");
+#endif
+            packages.Add($"https://{token}@github.com/dat-dangba/EagleBaseGameV2.git");
+
+            InstallPackageHelper.Install(packages);
         }
 
         private void InstallBaseGame()
         {
             string token = EagleServices.GetToken();
             if (string.IsNullOrEmpty(token)) return;
-            InstallPackageHelper.Install($"https://{token}@github.com/dat-dangba/EagleBaseGame.git");
+
+            List<string> packages = new List<string>();
+#if !HAS_AUTO_REFERENCE
+            packages.Add($"https://{token}@github.com/dat-dangba/EagleAutoReference.git");
+#endif
+            packages.Add($"https://{token}@github.com/dat-dangba/EagleBaseGame.git");
+
+            InstallPackageHelper.Install(packages);
         }
     }
 }

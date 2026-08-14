@@ -14,6 +14,7 @@ namespace Eagle
         private static readonly Dictionary<string, string> SdkDefinitions = new()
         {
             { "HAS_MAX_SDK", "com.applovin.mediation.ads" },
+            { "HAS_AUTO_REFERENCE", "com.eagle.autoreference" },
             { "HAS_BASE_GAME", "com.eagle.basegame" },
             { "HAS_BASE_GAME_V2", "com.eagle.basegame.v2" },
             { "HAS_ADJUST_SDK", "com.adjust.sdk" },
