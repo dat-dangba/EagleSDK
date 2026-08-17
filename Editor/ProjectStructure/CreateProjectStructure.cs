@@ -7,7 +7,7 @@ namespace Eagle
 {
     public static class CreateProjectStructure
     {
-        private const string PACKAGE_NAME = "com.eagle.basegame.v2";
+        private const string PACKAGE_NAME = "com.eagle.core";
         private const string SOURCE_FOLDER = "ProjectStructure~";
 
         public static void CopyProjectStructure()

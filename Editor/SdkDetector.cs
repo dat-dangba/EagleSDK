@@ -17,6 +17,7 @@ namespace Eagle
             { "HAS_AUTO_REFERENCE", "com.eagle.autoreference" },
             { "HAS_BASE_GAME", "com.eagle.basegame" },
             { "HAS_BASE_GAME_V2", "com.eagle.basegame.v2" },
+            { "HAS_CORE", "com.eagle.core" },
             { "HAS_ADJUST_SDK", "com.adjust.sdk" },
             { "HAS_IN_APP_PURCHASING", "com.unity.purchasing" },
             { "HAS_EAGLE_ANALYTICS", "com.eagle.analytics" },

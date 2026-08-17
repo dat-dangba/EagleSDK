@@ -33,8 +33,8 @@ namespace Eagle
             root.Add(new InstallPackageVisualElement("Base Game", InstallBaseGame));
 #endif
 
-#if HAS_BASE_GAME_V2
-            root.Add(new PackageInstalledVisualElement("Base Game v2")
+#if HAS_CORE
+            root.Add(new PackageInstalledVisualElement("Core")
             {
                 style =
                 {
@@ -53,7 +53,7 @@ namespace Eagle
 
             root.Add(createProjectStructure);
 #else
-            root.Add(new InstallPackageVisualElement("Base Game v2", InstallBaseGameV2)
+            root.Add(new InstallPackageVisualElement("Core", InstallCore)
             {
                 style =
                 {
@@ -71,12 +71,12 @@ namespace Eagle
             InstallPackageHelper.Install($"https://{token}@github.com/dat-dangba/EagleAutoReference.git");
         }
 
-        private void InstallBaseGameV2()
+        private void InstallCore()
         {
             string token = EagleServices.GetToken();
             if (string.IsNullOrEmpty(token)) return;
 
-            InstallPackageHelper.Install($"https://{token}@github.com/dat-dangba/EagleBaseGameV2.git");
+            InstallPackageHelper.Install($"https://{token}@github.com/dat-dangba/EagleCore.git");
         }
 
         private void InstallBaseGame()
