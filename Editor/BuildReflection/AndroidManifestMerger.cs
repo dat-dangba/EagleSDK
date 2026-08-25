@@ -108,7 +108,7 @@ namespace Eagle
         {
             if (!File.Exists(manifestPath))
             {
-                Debug.LogError($"Không tìm thấy file manifest: {manifestPath}");
+                Debug.LogWarning($"Không tìm thấy file manifest: {manifestPath}");
                 return;
             }
 
@@ -117,14 +117,14 @@ namespace Eagle
             var manifest = xml.SelectSingleNode("/manifest");
             if (manifest == null)
             {
-                Debug.LogError($"Không tìm thấy thẻ manifest trong file {manifestPath}");
+                Debug.LogWarning($"Không tìm thấy thẻ manifest trong file {manifestPath}");
                 return;
             }
 
             var application = manifest.SelectSingleNode("application");
             if (application == null)
             {
-                Debug.LogError($"Không tìm thấy thẻ application trong manifest {manifestPath}");
+                Debug.LogWarning($"Không tìm thấy thẻ application trong manifest {manifestPath}");
                 return;
             }
 
@@ -159,7 +159,7 @@ namespace Eagle
         {
             if (configDict.Count == 0)
             {
-                Debug.LogError($"Không có config cần thêm");
+                Debug.LogWarning($"Không có config cần thêm");
                 return false;
             }
 
@@ -167,7 +167,7 @@ namespace Eagle
 
             if (!File.Exists(buildGradlePath))
             {
-                Debug.LogError($"Không tìm thấy file buildGradle: {buildGradlePath}");
+                Debug.LogWarning($"Không tìm thấy file buildGradle: {buildGradlePath}");
                 return false;
             }
 
@@ -179,7 +179,7 @@ namespace Eagle
                 int startOfDefaultConfig = content.IndexOf("defaultConfig", StringComparison.Ordinal);
                 if (startOfDefaultConfig == -1)
                 {
-                    Debug.LogError("Không thể chèn manifestPlaceholders vào defaultConfig trong build.gradle");
+                    Debug.LogWarning("Không thể chèn manifestPlaceholders vào defaultConfig trong build.gradle");
                     return false;
                 }
 
@@ -187,7 +187,7 @@ namespace Eagle
                 int lastCloseBrace = FindClosingBrace(content, firstOpenBrace);
                 if (lastCloseBrace == -1)
                 {
-                    Debug.LogError("Không thể chèn manifestPlaceholders vào defaultConfig trong build.gradle");
+                    Debug.LogWarning("Không thể chèn manifestPlaceholders vào defaultConfig trong build.gradle");
                     return false;
                 }
 
@@ -197,7 +197,7 @@ namespace Eagle
                 return true;
             }
 
-            Debug.LogError("Không tìm thấy thẻ defaultConfig trong build.gradle");
+            Debug.LogWarning("Không tìm thấy thẻ defaultConfig trong build.gradle");
             return false;
         }
 
