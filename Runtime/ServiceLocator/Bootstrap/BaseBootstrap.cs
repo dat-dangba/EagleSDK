@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -44,31 +42,40 @@ namespace Eagle
 
         protected virtual void RegisterServices()
         {
-            foreach (var service in _Services.OfType<IService>())
+            foreach (var service in _Services)
             {
                 RegisterService(service);
             }
         }
 
-        protected virtual void RegisterService(IService service)
+        protected virtual void RegisterService(MonoBehaviour service)
         {
             var type = service.GetType();
-            var interfaces = GetMostDerivedInterfaces(type);
             var method = typeof(ServiceContainer).GetMethod(nameof(ServiceContainer.Register));
             if (method == null) return;
-            var generic = method.MakeGenericMethod(interfaces.Length == 0 ? type : interfaces[0]);
+            var generic = method.MakeGenericMethod(type);
             generic.Invoke(Container, new object[] { service });
         }
 
-        private Type[] GetMostDerivedInterfaces(Type concreteType)
-        {
-            var allInterfaces = concreteType.GetInterfaces();
-            // Loại bỏ interface nào là "cha" của 1 interface khác trong cùng danh sách
-            return allInterfaces
-                .Where(candidate => !allInterfaces.Any(other =>
-                    other != candidate && candidate.IsAssignableFrom(other)))
-                .ToArray();
-        }
+        // protected virtual void RegisterService(IService service)
+        // {
+        //     var type = service.GetType();
+        //     var interfaces = GetMostDerivedInterfaces(type);
+        //     var method = typeof(ServiceContainer).GetMethod(nameof(ServiceContainer.Register));
+        //     if (method == null) return;
+        //     var generic = method.MakeGenericMethod(interfaces.Length == 0 ? type : interfaces[0]);
+        //     generic.Invoke(Container, new object[] { service });
+        // }
+        //
+        // private Type[] GetMostDerivedInterfaces(Type concreteType)
+        // {
+        //     var allInterfaces = concreteType.GetInterfaces();
+        //     // Loại bỏ interface nào là "cha" của 1 interface khác trong cùng danh sách
+        //     return allInterfaces
+        //         .Where(candidate => !allInterfaces.Any(other =>
+        //             other != candidate && candidate.IsAssignableFrom(other)))
+        //         .ToArray();
+        // }
 
         protected virtual async Task BootstrapAsync()
         {
