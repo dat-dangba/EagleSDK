@@ -20,6 +20,7 @@ namespace Eagle
 
         protected virtual void LoadAllService()
         {
+            if (transform.childCount <= 0) return;
             foreach (Transform item in transform)
             {
                 _Services.Add(item.gameObject.GetComponent<MonoBehaviour>());
