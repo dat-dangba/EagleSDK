@@ -20,6 +20,7 @@ namespace Eagle
 
         protected virtual void LoadAllService()
         {
+            _Services = new List<MonoBehaviour>();
             if (transform.childCount <= 0) return;
             foreach (Transform item in transform)
             {
