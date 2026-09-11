@@ -13,6 +13,11 @@ namespace Eagle
         public static event Action<bool> OnAppPause;
         public static event Action<bool> OnAppFocus;
 
+        private void Awake()
+        {
+            DontDestroyOnLoad(gameObject);
+        }
+
         private void OnApplicationPause(bool pause)
         {
             OnAppPause?.Invoke(pause);
